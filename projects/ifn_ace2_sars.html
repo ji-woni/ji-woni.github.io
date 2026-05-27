@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IFN / ACE2 / SARS-CoV-2 – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+
+  .journal-badge {
+    display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
+  }
+  [data-theme="light"] .journal-badge { color: #fff; }
+
+  section { margin: 28px 0; }
+
+  ul { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; }
+  li::marker { color: var(--accent); }
+
+  .fig-placeholder {
+    background: var(--border); border-radius: 14px;
+    padding: 48px 24px; text-align: center;
+    color: var(--muted); font-size: 0.9rem; margin: 16px 0;
+    border: 2px dashed var(--border);
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box {
+    background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2);
+  }
+  .highlight-box p { margin: 0; }
+
+  .paradox-box {
+    background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25);
+    border-radius: 12px; padding: 20px 24px; margin: 16px 0;
+  }
+  [data-theme="light"] .paradox-box {
+    background: rgba(8,145,178,0.06); border-color: rgba(8,145,178,0.2);
+  }
+  .paradox-box .label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 8px;
+  }
+  .paradox-box p { margin: 0; font-size: 0.97rem; }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="journal-badge">Angiogenesis · 2022</div>
+      <h1>IFN-α/β Paradoxically Facilitates SARS-CoV-2 Pulmonary Vascular Infection by Upregulating ACE2</h1>
+      <p class="subtitle">How the antiviral immune response creates a pro-viral niche in the lung vasculature</p>
+      <div class="tagrow">
+        <span class="tag">SARS-CoV-2</span>
+        <span class="tag">Interferon Signaling</span>
+        <span class="tag">ACE2</span>
+        <span class="tag">Pulmonary Vasculature</span>
+        <span class="tag">Vascular Tropism</span>
+        <span class="tag">COVID-19</span>
+        <span class="tag">Angiogenesis</span>
+      </div>
+    </header>
+
+    <!-- Overview -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        The severity of COVID-19 correlates strongly with vascular pathology — coagulopathy,
+        endothelialitis, and pulmonary vascular dysfunction. Yet how SARS-CoV-2 gains access
+        to pulmonary vascular cells in the first place remained poorly understood. This work
+        uncovers a paradoxical mechanism: <strong>type I interferons (IFN-α and IFN-β)</strong>,
+        the body's canonical antiviral defense, transcriptionally upregulate <strong>ACE2</strong>
+        — the receptor SARS-CoV-2 uses to enter cells — on pulmonary vascular endothelial and
+        smooth muscle cells.
+      </p>
+
+      <div class="paradox-box">
+        <div class="label">The Paradox</div>
+        <p>
+          Interferon signaling is classically protective: it restricts viral replication and
+          primes an antiviral state. But in the pulmonary vasculature, IFN-driven ACE2
+          upregulation <em>increases</em> the density of SARS-CoV-2 entry receptors —
+          making vascular cells more, not less, susceptible to infection.
+        </p>
+      </div>
+    </section>
+
+    <!-- Background -->
+    <section>
+      <h2>Background &amp; Motivation</h2>
+      <p>
+        SARS-CoV-2 enters cells via ACE2, a transmembrane carboxypeptidase highly expressed
+        in lung alveolar type II cells. However, clinical reports from COVID-19 patients
+        documented widespread <em>vascular</em> pathology — thrombi in small pulmonary
+        arteries, endothelial injury, and virally infected endothelial cells — in tissue
+        where baseline ACE2 expression is low.
+      </p>
+      <p>
+        The question we asked: <em>what induces ACE2 in pulmonary vascular cells during
+        early SARS-CoV-2 infection?</em> Type I interferons are among the first cytokines
+        released in response to viral sensing, and the ACE2 locus contains
+        interferon-stimulated response elements (ISREs). We hypothesized that IFN
+        signaling, triggered by early viral sensing or bystander immune activation,
+        upregulates ACE2 and thereby sensitizes the vasculature.
+      </p>
+    </section>
+
+    <!-- Approach -->
+    <section>
+      <h2>Experimental Approach</h2>
+
+      <div class="grid-2">
+        <div>
+          <h3>IFN Treatment of Vascular Cells</h3>
+          <p>
+            Human pulmonary artery endothelial cells (HPAECs) and smooth muscle cells
+            (HPASMCs) were treated with recombinant IFN-α or IFN-β at physiologically
+            relevant concentrations. ACE2 mRNA and protein levels were measured by
+            qRT-PCR, Western blot, and immunofluorescence.
+          </p>
+        </div>
+        <div>
+          <h3>ACE2-Dependent SARS-CoV-2 Infection</h3>
+          <p>
+            IFN-pretreated and control vascular cells were exposed to SARS-CoV-2
+            pseudovirus and authentic virus in BSL-3 conditions. Viral entry,
+            replication, and cell viability were quantified to determine whether
+            IFN-driven ACE2 upregulation translated to enhanced infectivity.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Promoter Analysis</h3>
+          <p>
+            Bioinformatic analysis of the ACE2 promoter confirmed ISRE and
+            IFN-γ activation site (GAS) elements, and chromatin immunoprecipitation
+            validated STAT1/STAT2 occupancy at these sites following IFN stimulation.
+          </p>
+        </div>
+        <div>
+          <h3>In Vivo Validation</h3>
+          <p>
+            Mice treated with poly(I:C) to induce endogenous IFN responses were
+            examined for pulmonary ACE2 expression by IHC, confirming the
+            IFN→ACE2 axis in vivo in intact lung vasculature.
+          </p>
+        </div>
+      </div>
+
+      <div class="fig-placeholder">
+        [ Figure · IFN dose-response curves for ACE2 protein upregulation in HPAECs ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Findings -->
+    <section>
+      <h2>Key Findings</h2>
+
+      <div class="highlight-box">
+        <p>
+          <strong>IFN-α and IFN-β dose-dependently upregulate ACE2 expression in pulmonary
+          vascular cells, and this upregulation significantly enhances SARS-CoV-2 entry
+          and replication in these cells.</strong>
+        </p>
+      </div>
+
+      <ul>
+        <li>Both IFN-α and IFN-β robustly increase ACE2 mRNA (5–15×) and protein (3–8×) in HPAECs and HPASMCs.</li>
+        <li>ACE2 upregulation is JAK1/TYK2-STAT1/STAT2-dependent; it is abolished by ruxolitinib (JAK inhibitor).</li>
+        <li>IFN-pretreated vascular cells show significantly higher SARS-CoV-2 pseudovirus entry compared to untreated controls.</li>
+        <li>Authentic SARS-CoV-2 replication is amplified in IFN-exposed HPAECs, with increased viral RNA and nucleocapsid protein detectable at 48 h.</li>
+        <li>In vivo, poly(I:C) challenge increases ACE2 expression specifically in pulmonary vascular endothelium, confirmed by co-staining with the endothelial marker CD31.</li>
+        <li>The IFN→ACE2 mechanism is also operative in placental cells, consistent with the companion observation of placental ACE2 shedding in COVID-19 pregnancies.</li>
+      </ul>
+
+      <div class="fig-placeholder">
+        [ Figure · SARS-CoV-2 entry assay: IFN-pretreated vs. control HPAECs ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Significance -->
+    <section>
+      <h2>Significance</h2>
+      <p>
+        These findings reframe how SARS-CoV-2 achieves its vascular tropism. Rather than
+        requiring high baseline ACE2, the virus exploits the host's own antiviral machinery:
+        the early interferon burst that precedes adaptive immunity inadvertently opens the
+        vascular door. This has several implications:
+      </p>
+      <ul>
+        <li><strong>Therapeutic:</strong> JAK inhibitors, which block IFN→STAT signaling (and are already in clinical use for severe COVID-19), may partially work by limiting ACE2 upregulation in vascular cells.</li>
+        <li><strong>Pathogenic:</strong> The timing of IFN responses relative to vascular spread could explain why endovascular disease predominates in patients with robust early innate immune activation.</li>
+        <li><strong>Broader:</strong> Other IFN-inducing pathogens that also use ACE2 (or similar IFN-upregulated receptors) may exploit this same route of vascular entry.</li>
+      </ul>
+    </section>
+
+    <!-- Citation -->
+    <section>
+      <h2>Publication</h2>
+      <div class="citation-block">
+        T Klouda, Y Hao, H Kim, J Kim, J Olejnik, AJ Hume, S Ayyappan, X Hong, et al.<br>
+        <strong>"Interferon-alpha or -beta facilitates SARS-CoV-2 pulmonary vascular infection by inducing ACE2."</strong><br>
+        <em>Angiogenesis</em>, vol. 25(2), pp. 225–240. 2022.
+      </div>
+    </section>
+
+  </article>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script>
+  (function () {
+    var saved = localStorage.getItem('theme');
+    var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    var theme = saved || (prefersLight ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  })();
+</script>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jiwon Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f7fafa;
+      --surface: #ffffff;
+      --text: #1e2d2f;
+      --text-light: #5a7072;
+      --accent: #0f766e;
+      --accent-2: #0891b2;
+      --border: #d9e8e7;
+      --shadow: 0 4px 16px rgba(0,0,0,0.04);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #0c1a1a;
+      --surface: #132020;
+      --text: #e2f0ef;
+      --text-light: #7bb5b2;
+      --accent: #2dd4bf;
+      --accent-2: #38bdf8;
+      --border: #1e3535;
+      --shadow: 0 4px 16px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      align-items: start;
+      min-height: 100vh;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: sticky; top: 0;
+      height: 100vh; overflow-y: auto;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 36px 22px;
+      display: flex; flex-direction: column; gap: 28px;
+    }
+
+    .profile { text-align: center; }
+
+    .avatar-wrap {
+      width: 100px; height: 100px; border-radius: 50%;
+      margin: 0 auto 14px;
+      border: 3px solid var(--accent);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--text-light);
+      transition: all 0.3s;
+    }
+    .avatar-wrap:hover { transform: scale(1.05) rotate(2deg); box-shadow: var(--shadow-lg); }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .profile h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 600; color: var(--text); margin-bottom: 5px;
+    }
+    .profile p { font-size: 0.82rem; color: var(--text-light); line-height: 1.5; }
+
+    .nav { display: flex; flex-direction: column; gap: 4px; }
+    .nav-item {
+      padding: 10px 14px; border-radius: 10px; cursor: pointer;
+      font-weight: 500; color: var(--text-light);
+      background: transparent; border: none;
+      text-align: left; font-size: 0.9rem; font-family: 'Outfit', sans-serif;
+      display: flex; align-items: center; gap: 9px;
+      transition: all 0.25s;
+    }
+    .nav-item:hover { background: var(--bg); color: var(--accent); }
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+    .contact-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 13px; border-radius: 9px;
+      text-decoration: none; color: var(--text-light);
+      font-size: 0.85rem; border: 1px solid var(--border);
+      transition: all 0.25s;
+    }
+    .contact-link:hover { background: var(--bg); border-color: var(--accent); color: var(--accent); }
+
+    .theme-btn {
+      width: 100%; padding: 10px; border-radius: 9px;
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text); cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 500;
+      transition: all 0.25s;
+    }
+    .theme-btn:hover { border-color: var(--accent); }
+
+    /* mobile */
+    .menu-btn {
+      display: none; position: fixed; top: 16px; left: 16px; z-index: 1001;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 9px; padding: 10px 14px; cursor: pointer;
+      font-size: 1.1rem; box-shadow: var(--shadow);
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed; top: 0; left: -100%; height: 100vh;
+        z-index: 1000; transition: left 0.3s; box-shadow: var(--shadow-lg);
+      }
+      .sidebar.open { left: 0; }
+      .menu-btn { display: block; }
+    }
+
+    /* ── Content ── */
+    .content { overflow: hidden; }
+
+    section {
+      padding: 52px 44px;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-child { border-bottom: none; }
+
+    @media (max-width: 768px) { section { padding: 52px 24px; } }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 600; color: var(--text);
+      margin-bottom: 26px; line-height: 1.2;
+    }
+
+    /* ── About ── */
+    .about-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px; align-items: start;
+    }
+    @media (max-width: 680px) { .about-hero { grid-template-columns: 1fr; } }
+
+    .about-bio {
+      font-size: 1rem; color: var(--text-light); line-height: 1.8;
+    }
+    .about-bio strong { color: var(--text); }
+    .about-bio a { color: var(--accent); text-decoration: none; }
+
+    .hero-graphic {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .vascular-svg { width: 100%; max-width: 340px; height: auto; }
+    .about-hero { align-items: center; }
+
+    /* ── Expertise ── */
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px; margin-bottom: 36px;
+    }
+    .area-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 14px;
+      text-align: center; cursor: default;
+      transition: all 0.25s;
+    }
+    .area-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .area-emoji { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+    .area-name { font-size: 0.82rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+
+    .skills-divider {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-light);
+      margin-bottom: 14px;
+    }
+    .skill-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      padding: 5px 13px; border-radius: 20px; font-size: 0.84rem; font-weight: 500;
+      background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      transition: all 0.2s;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    .pill.hi {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white; border-color: transparent;
+    }
+
+    /* ── Research Cards ── */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    @media (max-width: 500px) { .research-grid { grid-template-columns: 1fr; } }
+
+    .r-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      text-decoration: none; color: inherit;
+      transition: all 0.3s; box-shadow: var(--shadow);
+      display: flex; flex-direction: column;
+    }
+    .r-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+
+    .r-banner {
+      height: 150px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.6rem; position: relative; overflow: hidden;
+      flex-shrink: 0;
+    }
+    .r-banner::before, .r-banner::after {
+      content: ''; position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+    .r-banner::before { width: 130px; height: 130px; top: -40px; right: -20px; }
+    .r-banner::after  { width: 80px;  height: 80px;  bottom: -24px; left: 16px; }
+
+    .r-banner.red    { background: linear-gradient(135deg, #7f1d1d, #b91c1c); }
+    .r-banner.blue   { background: linear-gradient(135deg, #0c4a6e, #0369a1); }
+    .r-banner.rose   { background: linear-gradient(135deg, #881337, #be185d); }
+    .r-banner.teal   { background: linear-gradient(135deg, #134e4a, #0f766e); }
+    .r-banner.violet { background: linear-gradient(135deg, #1e1b4b, #4c1d95); }
+
+    .r-ongoing-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700;
+      background: rgba(167,139,250,0.18); border: 1px solid rgba(167,139,250,0.45);
+      color: #c4b5fd; margin-bottom: 10px; letter-spacing: 0.05em; width: fit-content;
+    }
+    .r-ongoing-badge::before {
+      content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: #a78bfa;
+      animation: pulse-dot 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .r-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .r-badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white; margin-bottom: 10px; letter-spacing: 0.03em; width: fit-content;
+    }
+    .r-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 600; color: var(--text);
+      margin-bottom: 12px; line-height: 1.35;
+    }
+    .r-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .r-tag {
+      padding: 3px 10px; border-radius: 6px; font-size: 0.78rem;
+      border: 1px solid var(--border); color: var(--text-light); background: var(--bg);
+    }
+    .r-link {
+      margin-top: auto; font-size: 0.85rem; font-weight: 600;
+      color: var(--accent); display: flex; align-items: center; gap: 5px;
+      transition: gap 0.2s;
+    }
+    .r-card:hover .r-link { gap: 9px; }
+    .r-banner svg {
+      position: absolute; width: 100%; height: 100%;
+      top: 0; left: 0;
+    }
+
+    /* ── Expertise split ── */
+    .expertise-split {
+      display: grid;
+      grid-template-columns: 1fr 210px;
+      gap: 40px; align-items: start;
+    }
+    @media (max-width: 960px) {
+      .expertise-split { grid-template-columns: 1fr; }
+      .expertise-diagram { display: none; }
+    }
+    .expertise-diagram {
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+    .neuro-cascade-svg { width: 100%; height: auto; }
+
+    /* ── Publications ── */
+    .pub-list { display: flex; flex-direction: column; gap: 12px; }
+    .pub {
+      display: flex; align-items: baseline; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 22px;
+      transition: all 0.25s; position: relative; overflow: hidden;
+    }
+    .pub::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      transform: scaleY(0); transition: transform 0.25s; transform-origin: top;
+    }
+    .pub:hover::before { transform: scaleY(1); }
+    .pub:hover { transform: translateX(4px); border-color: var(--accent); box-shadow: var(--shadow); }
+
+    .pub-meta { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+    .pub-title {
+      font-size: 0.97rem; font-weight: 600; color: var(--text); line-height: 1.4;
+    }
+    .pub-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .pub-journal {
+      font-size: 0.78rem; font-weight: 700; font-style: italic;
+      padding: 2px 9px; border-radius: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+    .pub-year { font-size: 0.78rem; color: var(--text-light); }
+    .pub-cite {
+      font-size: 0.78rem; color: var(--text-light);
+      background: var(--bg); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 20px;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  </style>
+</head>
+
+<body>
+  <button class="menu-btn" id="menuBtn">☰</button>
+
+  <div class="layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="profile">
+        <div class="avatar-wrap">
+          <img src="./assets/images/profile_photo.jpeg" alt="Jiwon Kim">
+        </div>
+        <h1>Jiwon Kim</h1>
+        <p>Neurovascular Biology<br>University of Pittsburgh</p>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-section="about">       <span>👋</span> About        </button>
+        <button class="nav-item"        data-section="expertise">   <span>🧪</span> Expertise    </button>
+        <button class="nav-item"        data-section="research">    <span>🔬</span> Research     </button>
+        <button class="nav-item"        data-section="publications"><span>📄</span> Publications </button>
+      </nav>
+
+      <div class="contact-links">
+        <a href="mailto:" class="contact-link"><span>📧</span> Email</a>
+        <!-- update href="mailto:..." -->
+        <a href="https://scholar.google.com/citations?user=qs57kEUAAAAJ" target="_blank" rel="noopener" class="contact-link"><span>🎓</span> Google Scholar</a>
+        <a href="#" class="contact-link"><span>🔗</span> LinkedIn</a>
+        <!-- update href -->
+        <a href="./assets/CV.pdf" download class="contact-link"><span>↓</span> CV</a>
+      </div>
+
+      <button class="theme-btn" id="themeBtn">🌙 Toggle Theme</button>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="content">
+
+      <!-- ABOUT -->
+      <section id="about">
+        <p class="section-label">About</p>
+        <h2 class="section-title">Jiwon Kim</h2>
+
+        <div class="about-hero">
+          <p class="about-bio">
+            Researcher at the <a href="https://www.pitt.edu" target="_blank" rel="noopener"><strong>University of Pittsburgh</strong></a>
+            working at the intersection of <strong>neuroscience</strong> and <strong>vascular biology</strong>.
+            I study how neurogenic signals shape immune and vascular responses — from sensory
+            neuron–mast cell crosstalk in allergic immunity to molecular drivers of
+            <strong>pulmonary vascular remodeling</strong>.
+          </p>
+
+          <div class="hero-graphic">
+            <svg class="vascular-svg" viewBox="0 0 380 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="ng" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%"   stop-color="var(--accent)"/>
+                  <stop offset="100%" stop-color="var(--accent-2)"/>
+                </linearGradient>
+                <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+                  <feGaussianBlur stdDeviation="6" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="glow-sm" x="-60%" y="-60%" width="220%" height="220%">
+                  <feGaussianBlur stdDeviation="3" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <!-- dendrite animation paths -->
+                <path id="nd1" d="M190,200 C172,172 148,142 128,112"/>
+                <path id="nd2" d="M190,200 C208,172 232,142 252,112"/>
+                <path id="nd3" d="M190,200 C156,192 118,180 84,165"/>
+                <path id="nd4" d="M190,200 C224,192 262,180 296,165"/>
+                <path id="nd5" d="M190,200 C185,162 178,128 172,95"/>
+                <path id="nd6" d="M190,200 C200,158 212,122 222,88"/>
+                <!-- axon animation paths -->
+                <path id="ax0" d="M190,200 C190,250 190,298 190,348"/>
+                <path id="ax1" d="M190,348 C170,368 148,380 132,400"/>
+                <path id="ax2" d="M190,348 C210,368 232,380 248,400"/>
+                <!-- background vessel animation paths -->
+                <path id="bv1" d="M190,390 C180,408 168,420 155,438"/>
+                <path id="bv2" d="M190,390 C200,408 212,420 225,438"/>
+              </defs>
+
+              <!-- ── BACKGROUND BLOBS ── -->
+              <circle cx="190" cy="165" r="130" fill="var(--accent)"   opacity="0.04"/>
+              <circle cx="105" cy="295" r="80"  fill="var(--accent-2)" opacity="0.04"/>
+              <circle cx="285" cy="270" r="65"  fill="var(--accent)"   opacity="0.03"/>
+
+              <!-- ── BACKGROUND VESSELS (secondary — pulmonary vascular element) ── -->
+              <path d="M190,390 C180,408 168,420 155,438"
+                    stroke="var(--accent)" stroke-width="2.0" stroke-linecap="round" opacity="0.22"/>
+              <path d="M190,390 C200,408 212,420 225,438"
+                    stroke="var(--accent)" stroke-width="2.0" stroke-linecap="round" opacity="0.22"/>
+              <path d="M155,438 C145,446 136,452 128,456"
+                    stroke="var(--accent)" stroke-width="1.3" stroke-linecap="round" opacity="0.16"/>
+              <path d="M225,438 C235,446 244,452 252,456"
+                    stroke="var(--accent)" stroke-width="1.3" stroke-linecap="round" opacity="0.16"/>
+              <!-- dim vessel particles -->
+              <circle r="1.8" fill="var(--accent)" opacity="0.32">
+                <animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#bv1"/></animateMotion>
+              </circle>
+              <circle r="1.8" fill="var(--accent)" opacity="0.32">
+                <animateMotion dur="2.6s" repeatCount="indefinite" begin="1.0s"><mpath href="#bv2"/></animateMotion>
+              </circle>
+
+              <!-- ── NEURON (primary) ── -->
+
+              <!-- Myelin sheath (thick dashed along axon) -->
+              <path d="M190,220 C190,250 190,298 190,345"
+                    stroke="var(--accent)" stroke-width="12" stroke-opacity="0.07"
+                    stroke-dasharray="24 10" stroke-linecap="square"/>
+
+              <!-- DENDRITES -->
+              <path d="M190,200 C172,172 148,142 128,112" stroke="url(#ng)" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M190,200 C208,172 232,142 252,112" stroke="url(#ng)" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M190,200 C156,192 118,180 84,165"  stroke="url(#ng)" stroke-width="2.0" stroke-linecap="round"/>
+              <path d="M190,200 C224,192 262,180 296,165" stroke="url(#ng)" stroke-width="2.0" stroke-linecap="round"/>
+              <path d="M190,200 C185,162 178,128 172,95"  stroke="url(#ng)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M190,200 C200,158 212,122 222,88"  stroke="url(#ng)" stroke-width="1.8" stroke-linecap="round"/>
+
+              <!-- AXON -->
+              <path d="M190,200 C190,250 190,298 190,348" stroke="url(#ng)" stroke-width="3.0" stroke-linecap="round"/>
+              <path d="M190,348 C170,368 148,380 132,400" stroke="url(#ng)" stroke-width="2.0" stroke-linecap="round"/>
+              <path d="M190,348 C210,368 232,380 248,400" stroke="url(#ng)" stroke-width="2.0" stroke-linecap="round"/>
+
+              <!-- SOMA PULSE RINGS -->
+              <circle cx="190" cy="200" r="20" fill="none" stroke="var(--accent)" stroke-width="1.5">
+                <animate attributeName="r"       values="20;46;46" dur="2.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.5;0;0"  dur="2.8s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="190" cy="200" r="20" fill="none" stroke="var(--accent)" stroke-width="1">
+                <animate attributeName="r"       values="20;46;46" dur="2.8s" repeatCount="indefinite" begin="1.4s"/>
+                <animate attributeName="opacity" values="0.3;0;0"  dur="2.8s" repeatCount="indefinite" begin="1.4s"/>
+              </circle>
+
+              <!-- SOMA BODY -->
+              <circle cx="190" cy="200" r="20" fill="var(--accent)" fill-opacity="0.2"
+                      stroke="var(--accent)" stroke-width="2.5" filter="url(#glow)">
+                <animate attributeName="fill-opacity" values="0.2;0.38;0.2" dur="2.8s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="190" cy="200" r="9"   fill="var(--accent)" fill-opacity="0.55"/>
+              <circle cx="186" cy="196" r="3.5" fill="white"         fill-opacity="0.28"/>
+
+              <!-- SYNAPTIC KNOBS -->
+              <circle cx="128" cy="112" r="5"   fill="var(--accent)"   fill-opacity="0.3" stroke="var(--accent)"   stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="252" cy="112" r="5"   fill="var(--accent-2)" fill-opacity="0.3" stroke="var(--accent-2)" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="84"  cy="165" r="4"   fill="var(--accent)"   fill-opacity="0.3" stroke="var(--accent)"   stroke-width="1.2"/>
+              <circle cx="296" cy="165" r="4"   fill="var(--accent-2)" fill-opacity="0.3" stroke="var(--accent-2)" stroke-width="1.2"/>
+              <circle cx="172" cy="95"  r="4"   fill="var(--accent)"   fill-opacity="0.3" stroke="var(--accent)"   stroke-width="1.2"/>
+              <circle cx="222" cy="88"  r="4"   fill="var(--accent-2)" fill-opacity="0.3" stroke="var(--accent-2)" stroke-width="1.2"/>
+              <circle cx="132" cy="400" r="5.5" fill="var(--accent)"   fill-opacity="0.35" stroke="var(--accent)"   stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="248" cy="400" r="5.5" fill="var(--accent-2)" fill-opacity="0.35" stroke="var(--accent-2)" stroke-width="1.5" filter="url(#glow-sm)"/>
+
+              <!-- NODES OF RANVIER -->
+              <circle cx="190" cy="248" r="3.5" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+              <circle cx="190" cy="296" r="3.5" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+              <circle cx="190" cy="330" r="3.0" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"/>
+
+              <!-- ── ACTION POTENTIAL PARTICLES ── -->
+              <circle r="3.5" fill="white" filter="url(#glow-sm)">
+                <animateMotion dur="1.6s" repeatCount="indefinite" begin="0s"><mpath href="#nd1"/></animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" repeatCount="indefinite" begin="0s"/>
+              </circle>
+              <circle r="3.5" fill="white" filter="url(#glow-sm)">
+                <animateMotion dur="1.6s" repeatCount="indefinite" begin="0.5s"><mpath href="#nd2"/></animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" repeatCount="indefinite" begin="0.5s"/>
+              </circle>
+              <circle r="3.0" fill="var(--accent-2)">
+                <animateMotion dur="1.5s" repeatCount="indefinite" begin="1.0s"><mpath href="#nd3"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="1.5s" repeatCount="indefinite" begin="1.0s"/>
+              </circle>
+              <circle r="3.0" fill="var(--accent-2)">
+                <animateMotion dur="1.5s" repeatCount="indefinite" begin="1.5s"><mpath href="#nd4"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="1.5s" repeatCount="indefinite" begin="1.5s"/>
+              </circle>
+              <circle r="2.8" fill="white">
+                <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.8s"><mpath href="#nd5"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.85;0.85;0" dur="1.4s" repeatCount="indefinite" begin="0.8s"/>
+              </circle>
+              <circle r="2.8" fill="white">
+                <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.3s"><mpath href="#nd6"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.85;0.85;0" dur="1.4s" repeatCount="indefinite" begin="0.3s"/>
+              </circle>
+              <!-- axon impulse -->
+              <circle r="4.0" fill="white" filter="url(#glow-sm)">
+                <animateMotion dur="1.8s" repeatCount="indefinite" begin="0.2s"><mpath href="#ax0"/></animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" dur="1.8s" repeatCount="indefinite" begin="0.2s"/>
+              </circle>
+              <circle r="2.8" fill="white">
+                <animateMotion dur="1.8s" repeatCount="indefinite" begin="1.1s"><mpath href="#ax0"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.8;0.8;0" dur="1.8s" repeatCount="indefinite" begin="1.1s"/>
+              </circle>
+              <circle r="2.5" fill="var(--accent)">
+                <animateMotion dur="1.0s" repeatCount="indefinite" begin="1.9s"><mpath href="#ax1"/></animateMotion>
+              </circle>
+              <circle r="2.5" fill="var(--accent-2)">
+                <animateMotion dur="1.0s" repeatCount="indefinite" begin="2.1s"><mpath href="#ax2"/></animateMotion>
+              </circle>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERTISE -->
+      <section id="expertise">
+        <p class="section-label">Expertise</p>
+        <h2 class="section-title">Research Focus</h2>
+
+        <div class="expertise-split">
+          <div>
+            <div class="area-grid">
+              <div class="area-card">
+                <span class="area-emoji">🧠</span>
+                <span class="area-name">Neuro-Immune Crosstalk</span>
+              </div>
+              <div class="area-card">
+                <span class="area-emoji">🌿</span>
+                <span class="area-name">Allergic Inflammation</span>
+              </div>
+              <div class="area-card">
+                <span class="area-emoji">🫀</span>
+                <span class="area-name">Pulmonary Vascular Biology</span>
+              </div>
+              <div class="area-card">
+                <span class="area-emoji">⛰️</span>
+                <span class="area-name">Hypoxia &amp; Remodeling</span>
+              </div>
+              <div class="area-card">
+                <span class="area-emoji">🦠</span>
+                <span class="area-name">Respiratory Virology</span>
+              </div>
+            </div>
+
+            <p class="skills-divider">Technical Toolkit</p>
+            <div class="skill-cloud">
+              <span class="pill hi">Neurogenic Signaling</span>
+              <span class="pill hi">Mast Cell Biology</span>
+              <span class="pill hi">Sensory Neuron Biology</span>
+              <span class="pill hi">HIF2α / Hypoxia</span>
+              <span class="pill">Precision Cut Lung Slices</span>
+              <span class="pill">Pericyte Culture</span>
+              <span class="pill">Endothelial Cell Culture</span>
+              <span class="pill">Mouse Disease Models</span>
+              <span class="pill">Conditional Knockouts</span>
+              <span class="pill">SARS-CoV-2 Infection Assays</span>
+              <span class="pill">Confocal Microscopy</span>
+              <span class="pill">Immunofluorescence</span>
+              <span class="pill">IHC / Histology</span>
+              <span class="pill">Western Blot</span>
+              <span class="pill">qRT-PCR</span>
+              <span class="pill">Flow Cytometry</span>
+              <span class="pill">ELISA</span>
+            </div>
+          </div>
+
+          <div class="expertise-diagram">
+            <!-- Neuro-immune cascade diagram: sensory neuron → mast cell → blood vessel -->
+            <svg class="neuro-cascade-svg" viewBox="0 0 220 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="exng" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent)"/>
+                  <stop offset="100%" stop-color="var(--accent-2)"/>
+                </linearGradient>
+                <filter id="exglow" x="-80%" y="-80%" width="260%" height="260%">
+                  <feGaussianBlur stdDeviation="4" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <path id="ex_s1" d="M110,102 C110,130 110,153 110,176"/>
+                <path id="ex_s2" d="M110,216 C110,242 110,264 110,288"/>
+                <path id="ex_flow" d="M28,320 C78,319 140,319 195,320"/>
+                <path id="ex_deg1" d="M110,194 C92,188 78,190 68,196"/>
+                <path id="ex_deg2" d="M110,194 C128,186 143,187 152,194"/>
+                <path id="ex_deg3" d="M110,194 C100,208 93,220 90,232"/>
+              </defs>
+
+              <!-- Background blobs -->
+              <circle cx="110" cy="88"  r="72" fill="var(--accent)"   opacity="0.04"/>
+              <circle cx="110" cy="195" r="48" fill="var(--accent-2)" opacity="0.03"/>
+              <circle cx="110" cy="316" r="56" fill="var(--accent)"   opacity="0.04"/>
+
+              <!-- ── SENSORY NEURON ── -->
+              <path d="M110,84 C90,62 68,46 50,28"    stroke="url(#exng)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M110,84 C110,59 108,38 106,18"  stroke="url(#exng)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M110,84 C130,62 152,46 170,28"  stroke="url(#exng)" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="50"  cy="28" r="3.5" fill="var(--accent)"   fill-opacity="0.3" stroke="var(--accent)"   stroke-width="1.2"/>
+              <circle cx="106" cy="18" r="3.5" fill="var(--accent-2)" fill-opacity="0.3" stroke="var(--accent-2)" stroke-width="1.2"/>
+              <circle cx="170" cy="28" r="3.5" fill="var(--accent)"   fill-opacity="0.3" stroke="var(--accent)"   stroke-width="1.2"/>
+              <!-- Soma pulse rings -->
+              <circle cx="110" cy="88" r="16" fill="none" stroke="var(--accent)" stroke-width="1.2">
+                <animate attributeName="r"       values="16;36;36" dur="2.6s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.5;0;0"  dur="2.6s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="110" cy="88" r="16" fill="none" stroke="var(--accent)" stroke-width="0.8">
+                <animate attributeName="r"       values="16;36;36" dur="2.6s" repeatCount="indefinite" begin="1.3s"/>
+                <animate attributeName="opacity" values="0.3;0;0"  dur="2.6s" repeatCount="indefinite" begin="1.3s"/>
+              </circle>
+              <!-- Soma body -->
+              <circle cx="110" cy="88" r="16" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2.2" filter="url(#exglow)">
+                <animate attributeName="fill-opacity" values="0.18;0.35;0.18" dur="2.6s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="110" cy="88" r="7"   fill="var(--accent)" fill-opacity="0.55"/>
+              <circle cx="106" cy="84" r="3"   fill="white"         fill-opacity="0.25"/>
+              <!-- Axon to mast cell -->
+              <path d="M110,104 C110,130 110,153 110,176" stroke="url(#exng)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="110" cy="140" r="3" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.6"/>
+              <!-- Action potential particles -->
+              <circle r="3.5" fill="white" filter="url(#exglow)">
+                <animateMotion dur="1.5s" repeatCount="indefinite" begin="0s"><mpath href="#ex_s1"/></animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+              </circle>
+              <circle r="2.8" fill="white">
+                <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.8s"><mpath href="#ex_s1"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.8;0.8;0" dur="1.5s" repeatCount="indefinite" begin="0.8s"/>
+              </circle>
+
+              <!-- ── MAST CELL ── -->
+              <circle cx="110" cy="196" r="20" fill="none" stroke="var(--accent-2)" stroke-width="1">
+                <animate attributeName="r"       values="20;42;42" dur="3.2s" repeatCount="indefinite" begin="0.5s"/>
+                <animate attributeName="opacity" values="0.38;0;0"  dur="3.2s" repeatCount="indefinite" begin="0.5s"/>
+              </circle>
+              <circle cx="110" cy="196" r="20" fill="var(--accent-2)" fill-opacity="0.12" stroke="var(--accent-2)" stroke-width="2" filter="url(#exglow)">
+                <animate attributeName="fill-opacity" values="0.12;0.24;0.12" dur="3.2s" repeatCount="indefinite" begin="0.5s"/>
+              </circle>
+              <!-- Granules inside -->
+              <circle cx="104" cy="190" r="2.2" fill="var(--accent-2)" opacity="0.55"/>
+              <circle cx="117" cy="194" r="2.0" fill="var(--accent)"   opacity="0.50"/>
+              <circle cx="108" cy="204" r="2.0" fill="var(--accent-2)" opacity="0.55"/>
+              <circle cx="119" cy="203" r="1.6" fill="var(--accent)"   opacity="0.45"/>
+              <circle cx="103" cy="201" r="1.5" fill="var(--accent-2)" opacity="0.40"/>
+              <!-- Degranulation spikes (6 radial) -->
+              <line x1="110" y1="176" x2="110" y2="168" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <line x1="127" y1="186" x2="134" y2="180" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <line x1="127" y1="206" x2="134" y2="212" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <line x1="110" y1="216" x2="110" y2="224" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <line x1="93"  y1="206" x2="86"  y2="212" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <line x1="93"  y1="186" x2="86"  y2="180" stroke="var(--accent-2)" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+              <!-- Degranulation particles flying out -->
+              <circle r="2.5" fill="var(--accent-2)">
+                <animateMotion dur="1.9s" repeatCount="indefinite" begin="0.3s"><mpath href="#ex_deg1"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.9;0" dur="1.9s" repeatCount="indefinite" begin="0.3s"/>
+                <animate attributeName="r" values="2.5;3.8;1" dur="1.9s" repeatCount="indefinite" begin="0.3s"/>
+              </circle>
+              <circle r="2.5" fill="var(--accent)">
+                <animateMotion dur="1.9s" repeatCount="indefinite" begin="1.1s"><mpath href="#ex_deg2"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.9;0" dur="1.9s" repeatCount="indefinite" begin="1.1s"/>
+                <animate attributeName="r" values="2.5;3.8;1" dur="1.9s" repeatCount="indefinite" begin="1.1s"/>
+              </circle>
+              <circle r="2" fill="var(--accent-2)">
+                <animateMotion dur="2.1s" repeatCount="indefinite" begin="0.7s"><mpath href="#ex_deg3"/></animateMotion>
+                <animate attributeName="opacity" values="0;0.85;0" dur="2.1s" repeatCount="indefinite" begin="0.7s"/>
+              </circle>
+              <!-- Signal to vessel (dashed) -->
+              <path d="M110,216 C110,242 110,264 110,288" stroke="url(#exng)" stroke-width="1.8" stroke-dasharray="4 5" stroke-linecap="round"/>
+              <circle r="2.5" fill="var(--accent)">
+                <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.6s"><mpath href="#ex_s2"/></animateMotion>
+                <animate attributeName="opacity" values="0;1;1;0" dur="1.4s" repeatCount="indefinite" begin="0.6s"/>
+              </circle>
+
+              <!-- ── BLOOD VESSEL ── -->
+              <path d="M28,310 C78,308 140,307 195,308 L195,332 C140,333 78,334 28,332 Z" fill="var(--accent)" fill-opacity="0.04"/>
+              <path d="M28,308 C78,306 140,305 195,306" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+              <path d="M28,332 C78,334 140,335 195,334" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+              <path d="M45,306 Q53,299 61,306 Q69,299 77,306 Q85,299 93,306 Q101,299 109,306 Q117,299 125,306 Q133,299 141,306 Q149,299 157,306 Q165,299 173,306 Q181,299 189,306"
+                    stroke="var(--accent-2)" stroke-width="0.8" fill="none" opacity="0.3"/>
+              <!-- Blood cells -->
+              <ellipse rx="9" ry="5.5" fill="var(--accent)" fill-opacity="0.25" stroke="var(--accent)" stroke-width="0.8">
+                <animateMotion dur="3.2s" repeatCount="indefinite" begin="0s"><mpath href="#ex_flow"/></animateMotion>
+              </ellipse>
+              <ellipse rx="9" ry="5.5" fill="var(--accent-2)" fill-opacity="0.2" stroke="var(--accent-2)" stroke-width="0.8">
+                <animateMotion dur="3.2s" repeatCount="indefinite" begin="1.6s"><mpath href="#ex_flow"/></animateMotion>
+              </ellipse>
+
+              <!-- Labels -->
+              <text x="6" y="85" font-size="8.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif" opacity="0.7">Sensory</text>
+              <text x="6" y="96" font-size="8.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif" opacity="0.7">Neuron</text>
+              <text x="138" y="192" font-size="8.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif" opacity="0.7">Mast</text>
+              <text x="138" y="203" font-size="8.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif" opacity="0.7">Cell</text>
+              <text x="42"  y="350" font-size="8.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif" opacity="0.7">Blood Vessel</text>
+              <text x="38"  y="396" font-size="7"   fill="var(--accent)"     font-family="Outfit,system-ui,sans-serif" opacity="0.55" letter-spacing="0.10em">NEURO-IMMUNE</text>
+              <text x="50"  y="407" font-size="7"   fill="var(--accent)"     font-family="Outfit,system-ui,sans-serif" opacity="0.55" letter-spacing="0.10em">CASCADE</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESEARCH -->
+      <section id="research">
+        <p class="section-label">Research</p>
+        <h2 class="section-title">Projects</h2>
+
+        <div class="research-grid">
+
+          <a href="projects/tacr1_stroke.html" class="r-card">
+            <div class="r-banner violet" style="position:relative;overflow:hidden;">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="hs_glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="rgba(167,139,250,0.35)"/>
+                    <stop offset="100%" stop-color="rgba(167,139,250,0)"/>
+                  </radialGradient>
+                  <path id="hs_d1" d="M100,58 C85,48 70,38 58,28"/>
+                  <path id="hs_d2" d="M100,58 C100,42 100,28 100,16"/>
+                  <path id="hs_d3" d="M100,58 C115,48 130,38 142,28"/>
+                  <path id="hs_a1" d="M100,68 C82,78 64,88 46,96"/>
+                  <path id="hs_a2" d="M100,68 C118,78 136,88 154,96"/>
+                </defs>
+                <!-- Glow halo behind neuron -->
+                <circle cx="100" cy="63" r="32" fill="url(#hs_glow)"/>
+                <!-- Stroke zone (top-right) — dashed circle + lightning bolt -->
+                <circle cx="162" cy="24" r="18" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="4 3" fill="rgba(255,255,255,0.04)"/>
+                <path d="M163,14 L158,23 L163,23 L158,33" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <text x="148" y="50" font-size="6" fill="rgba(255,255,255,0.4)" font-family="Outfit,system-ui" letter-spacing="0.05em">STROKE</text>
+                <!-- Dendrites pointing toward stroke zone -->
+                <path d="M100,58 C118,48 138,36 156,26" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M100,58 C100,42 100,28 100,16" stroke="rgba(167,139,250,0.4)" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M100,58 C82,48 64,36 56,28" stroke="rgba(167,139,250,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Soma -->
+                <circle cx="100" cy="63" r="10" fill="rgba(167,139,250,0.18)" stroke="rgba(167,139,250,0.8)" stroke-width="2"/>
+                <circle cx="100" cy="63" r="5"  fill="rgba(167,139,250,0.6)"/>
+                <circle cx="100" cy="63" r="14" stroke="rgba(167,139,250,0.25)" stroke-width="1" fill="none">
+                  <animate attributeName="r" values="14;18;14" dur="2.4s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.9;0.2;0.9" dur="2.4s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Axon branches downward -->
+                <path d="M100,73 C84,82 64,90 46,98" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M100,73 C116,82 136,90 154,98" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Aim 1: angiogenesis (vessel branching, bottom-left) -->
+                <path d="M32,98 L32,112" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M32,104 L26,112" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M32,104 L38,112" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <text x="14" y="122" font-size="5.5" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui">Angiogenesis</text>
+                <!-- Aim 2: glymphatic (vessel + waves, bottom-right) -->
+                <path d="M148,98 L168,98" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M153,93 Q158,90 163,93 Q168,90 173,93" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <path d="M153,103 Q158,106 163,103 Q168,106 173,103" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <text x="148" y="116" font-size="5.5" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui">Glymphatic</text>
+                <!-- Tacr1 label -->
+                <text x="82" y="60" font-size="7" fill="rgba(255,255,255,0.6)" font-family="Outfit,system-ui" font-weight="700">Tacr1</text>
+                <!-- Animated signal particles along dendrites -->
+                <circle r="2.5" fill="rgba(255,255,255,0.85)">
+                  <animateMotion dur="1.8s" repeatCount="indefinite" begin="0s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#hs_d1"/></animateMotion>
+                </circle>
+                <circle r="2" fill="rgba(167,139,250,0.9)">
+                  <animateMotion dur="2.0s" repeatCount="indefinite" begin="0.6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#hs_d2"/></animateMotion>
+                </circle>
+                <circle r="2" fill="rgba(255,255,255,0.7)">
+                  <animateMotion dur="1.9s" repeatCount="indefinite" begin="1.2s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#hs_d3"/></animateMotion>
+                </circle>
+                <!-- Axon output particles -->
+                <circle r="2.5" fill="rgba(255,255,255,0.9)">
+                  <animateMotion dur="1.6s" repeatCount="indefinite" begin="0.3s"><mpath href="#hs_a1"/></animateMotion>
+                </circle>
+                <circle r="2.5" fill="rgba(255,255,255,0.9)">
+                  <animateMotion dur="1.6s" repeatCount="indefinite" begin="1.1s"><mpath href="#hs_a2"/></animateMotion>
+                </circle>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge" style="background: linear-gradient(135deg,#6d28d9,#7c3aed);">AHA Fellowship · Ongoing</span>
+              <span class="r-ongoing-badge">ONGOING</span>
+              <h3 class="r-title">Tacr1 Neurons Orchestrate Stroke Recovery via Angiogenesis and Glymphatic Clearance</h3>
+              <div class="r-tags">
+                <span class="r-tag">Stroke Recovery</span>
+                <span class="r-tag">Tacr1 Neurons</span>
+                <span class="r-tag">Neurovascular</span>
+                <span class="r-tag">Glymphatic</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+          <a href="projects/scratching_immunity.html" class="r-card">
+            <div class="r-banner rose">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="170" cy="20" r="24" fill="rgba(255,255,255,0.05)"/>
+                <circle cx="20"  cy="95" r="30" fill="rgba(255,255,255,0.04)"/>
+                <!-- Sensory neuron (left) -->
+                <path d="M56,55 C44,40 32,30 22,18"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M56,55 C56,38 54,24 52,10"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M56,55 C45,60 32,63 18,62"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="22" cy="18" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="52" cy="10" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="18" cy="62" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="56" cy="55" r="12" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                <circle cx="56" cy="55" r="5"  fill="rgba(255,255,255,0.4)"/>
+                <!-- Signal arrow -->
+                <path d="M70,55 L98,55" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M94,50 L102,55 L94,60" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <text x="77" y="48" font-size="6" fill="rgba(255,255,255,0.45)" font-family="Outfit,system-ui">NP</text>
+                <!-- Mast cell (right) -->
+                <circle cx="138" cy="55" r="18" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                <line x1="138" y1="37" x2="138" y2="29" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="153" y1="43" x2="159" y2="37" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="153" y1="67" x2="159" y2="73" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="138" y1="73" x2="138" y2="81" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="123" y1="67" x2="117" y2="73" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="123" y1="43" x2="117" y2="37" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="132" cy="49" r="2.2" fill="rgba(255,255,255,0.35)"/>
+                <circle cx="144" cy="52" r="2.0" fill="rgba(255,255,255,0.35)"/>
+                <circle cx="136" cy="63" r="1.8" fill="rgba(255,255,255,0.35)"/>
+                <!-- Burst particles -->
+                <circle cx="163" cy="46" r="3" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                <circle cx="168" cy="60" r="2.5" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+                <circle cx="160" cy="70" r="2" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge">Science · 2025</span>
+              <h3 class="r-title">Scratching Activates Neurogenic Mast Cells, Amplifying Allergic Immunity</h3>
+              <div class="r-tags">
+                <span class="r-tag">Neuro-Immune</span>
+                <span class="r-tag">Mast Cells</span>
+                <span class="r-tag">Allergic Inflammation</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+          <a href="projects/pericyte_hif2a.html" class="r-card">
+            <div class="r-banner red">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20"  cy="20" r="22" fill="rgba(255,255,255,0.04)"/>
+                <circle cx="180" cy="100" r="28" fill="rgba(255,255,255,0.04)"/>
+                <!-- Vessel cross-section (concentric rings) -->
+                <!-- Adventitia -->
+                <circle cx="100" cy="60" r="48" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+                <!-- Smooth muscle layer -->
+                <circle cx="100" cy="60" r="38" stroke="rgba(255,255,255,0.35)" stroke-width="2" fill="rgba(255,255,255,0.03)"/>
+                <!-- Endothelial ring -->
+                <circle cx="100" cy="60" r="28" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="rgba(255,255,255,0.05)"/>
+                <!-- Lumen -->
+                <circle cx="100" cy="60" r="16" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                <!-- HIF2α star symbol in lumen -->
+                <path d="M100,51 L102,57 L108,57 L103,61 L105,67 L100,63 L95,67 L97,61 L92,57 L98,57 Z" fill="rgba(255,255,255,0.45)"/>
+                <!-- Pericyte cell body on vessel wall -->
+                <circle cx="128" cy="28" r="8" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                <circle cx="128" cy="28" r="3" fill="rgba(255,255,255,0.3)"/>
+                <!-- Pericyte process wrapping around vessel -->
+                <path d="M128,36 C136,44 138,53 136,62 C134,72 128,80 120,86" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                <!-- HIF2α label -->
+                <text x="150" y="40" font-size="8" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui" font-weight="600">HIF2α</text>
+                <text x="153" y="52" font-size="7" fill="rgba(255,255,255,0.35)" font-family="Outfit,system-ui">Pericyte</text>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge">EMBO Reports · 2024</span>
+              <h3 class="r-title">Pericytes Drive Pulmonary Vascular Remodeling via HIF2α</h3>
+              <div class="r-tags">
+                <span class="r-tag">HIF2α</span>
+                <span class="r-tag">Pericytes</span>
+                <span class="r-tag">PCLS</span>
+                <span class="r-tag">Mouse Models</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+          <a href="projects/ifn_ace2_sars.html" class="r-card">
+            <div class="r-banner blue">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="180" cy="20"  r="22" fill="rgba(255,255,255,0.04)"/>
+                <circle cx="22"  cy="100" r="28" fill="rgba(255,255,255,0.04)"/>
+                <!-- IFN signal waves (left) -->
+                <path d="M12,44 Q22,33 32,44 Q42,55 52,44 Q62,33 72,44" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M12,58 Q22,47 32,58 Q42,69 52,58 Q62,47 72,58" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+                <path d="M12,72 Q22,61 32,72 Q42,83 52,72 Q62,61 72,72" stroke="rgba(255,255,255,0.22)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+                <text x="12" y="27" font-size="8" fill="rgba(255,255,255,0.6)" font-family="Outfit,system-ui" font-weight="600">IFN-α/β</text>
+                <!-- Arrow -->
+                <path d="M76,58 L104,58" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M100,53 L108,58 L100,63" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Cell outline -->
+                <ellipse cx="148" cy="62" rx="38" ry="40" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                <!-- ACE2 receptor (Y-shape on cell surface, left) -->
+                <line x1="118" y1="62" x2="126" y2="62" stroke="rgba(255,255,255,0.65)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M118,62 L113,54 M118,62 L113,70" stroke="rgba(255,255,255,0.65)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <text x="111" y="83" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui" font-weight="600">ACE2</text>
+                <!-- Virus particle (top right) -->
+                <circle cx="183" cy="34" r="11" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
+                <circle cx="183" cy="34" r="4"  fill="rgba(255,255,255,0.3)"/>
+                <line x1="183" y1="23" x2="183" y2="17" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="194" y1="27" x2="198" y2="23" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="194" y1="41" x2="198" y2="45" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="183" y1="45" x2="183" y2="51" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="172" y1="41" x2="168" y2="45" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="172" y1="27" x2="168" y2="23" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge">Angiogenesis · 2022</span>
+              <h3 class="r-title">IFN-α/β Paradoxically Facilitates SARS-CoV-2 Vascular Infection via ACE2</h3>
+              <div class="r-tags">
+                <span class="r-tag">SARS-CoV-2</span>
+                <span class="r-tag">IFN Signaling</span>
+                <span class="r-tag">ACE2</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+          <a href="projects/placental_ace2.html" class="r-card">
+            <div class="r-banner teal">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="175" cy="15" r="20" fill="rgba(255,255,255,0.04)"/>
+                <circle cx="20"  cy="95" r="26" fill="rgba(255,255,255,0.04)"/>
+                <!-- Placenta (large scalloped circle) -->
+                <circle cx="78" cy="62" r="46" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-dasharray="5 3"/>
+                <!-- Syncytiotrophoblast bumps -->
+                <path d="M42,38 Q49,28 56,38 Q63,28 70,38 Q77,28 84,38 Q91,28 98,38 Q105,28 112,38" stroke="rgba(255,255,255,0.32)" stroke-width="1.5" fill="none"/>
+                <!-- Inner cell area -->
+                <circle cx="78" cy="64" r="28" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+                <!-- ACE2 receptors on placenta surface -->
+                <path d="M54,46 L49,39 M54,46 L49,53 M54,46 L61,46" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M102,46 L97,39 M102,46 L97,53 M102,46 L109,46" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Shedding arrow (sACE2 released into serum) -->
+                <path d="M116,42 L135,30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                <circle cx="140" cy="26" r="5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
+                <text x="148" y="22" font-size="6.5" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui">sACE2</text>
+                <!-- Virus particle -->
+                <circle cx="162" cy="66" r="14" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+                <circle cx="162" cy="66" r="5"  fill="rgba(255,255,255,0.28)"/>
+                <line x1="162" y1="52" x2="162" y2="46" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="174" y1="56" x2="179" y2="52" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="176" y1="66" x2="182" y2="66" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="174" y1="76" x2="179" y2="80" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="162" y1="80" x2="162" y2="86" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="150" y1="76" x2="145" y2="80" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="148" y1="66" x2="142" y2="66" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="150" y1="56" x2="145" y2="52" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Arrow virus → placenta -->
+                <path d="M147,70 L125,70" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M129,66 L124,70 L129,74" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge">Am J Pathology · 2022</span>
+              <h3 class="r-title">Acute SARS-CoV-2 in Pregnancy Is Associated with Placental ACE2 Shedding</h3>
+              <div class="r-tags">
+                <span class="r-tag">SARS-CoV-2</span>
+                <span class="r-tag">Placenta</span>
+                <span class="r-tag">ACE2</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+          <a href="projects/pcls_tool.html" class="r-card">
+            <div class="r-banner teal">
+              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="175" cy="15"  r="20" fill="rgba(255,255,255,0.04)"/>
+                <circle cx="25"  cy="105" r="25" fill="rgba(255,255,255,0.04)"/>
+                <!-- Lung slice outline -->
+                <ellipse cx="100" cy="62" rx="84" ry="50" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+                <!-- Alveolar grid: Row 1 -->
+                <circle cx="56"  cy="54" r="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+                <circle cx="82"  cy="54" r="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+                <circle cx="136" cy="54" r="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+                <!-- Row 2 (offset) -->
+                <circle cx="69"  cy="74" r="11" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.22)" stroke-width="1.2"/>
+                <circle cx="121" cy="74" r="11" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.22)" stroke-width="1.2"/>
+                <!-- Highlighted vessel circle -->
+                <circle cx="108" cy="54" r="12" fill="rgba(255,255,255,0.1)"  stroke="rgba(255,255,255,0.65)" stroke-width="2.2"/>
+                <circle cx="108" cy="54" r="6"  fill="rgba(255,255,255,0.22)"/>
+                <!-- Smooth muscle ring around vessel -->
+                <circle cx="108" cy="54" r="17" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <!-- Endothelial cells on vessel wall (scallops) -->
+                <path d="M97,44 Q102,38 107,44 Q112,38 117,44" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <!-- Vibratome cut line (horizontal dashed) -->
+                <line x1="16" y1="62" x2="184" y2="62" stroke="rgba(255,255,255,0.14)" stroke-width="0.8" stroke-dasharray="5 4"/>
+                <!-- Slice thickness marker -->
+                <line x1="16" y1="46" x2="16" y2="78" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linecap="round"/>
+                <line x1="13" y1="46" x2="19" y2="46" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linecap="round"/>
+                <line x1="13" y1="78" x2="19" y2="78" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-linecap="round"/>
+                <text x="21" y="65" font-size="6" fill="rgba(255,255,255,0.38)" font-family="Outfit,system-ui">200µm</text>
+                <!-- Label -->
+                <text x="45" y="105" font-size="7" fill="rgba(255,255,255,0.4)" font-family="Outfit,system-ui" letter-spacing="0.08em">PRECISION CUT SLICE</text>
+              </svg>
+            </div>
+            <div class="r-body">
+              <span class="r-badge">JoVE · 2021</span>
+              <h3 class="r-title">Precision Cut Lung Slices for Pulmonary Vessel Studies</h3>
+              <div class="r-tags">
+                <span class="r-tag">PCLS</span>
+                <span class="r-tag">Ex Vivo</span>
+                <span class="r-tag">Contractility</span>
+              </div>
+              <span class="r-link">View project <span>→</span></span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- PUBLICATIONS -->
+      <section id="publications">
+        <p class="section-label">Publications</p>
+        <h2 class="section-title">Selected Works</h2>
+
+        <div class="pub-list">
+
+          <div class="pub">
+            <div class="pub-meta">
+              <span class="pub-title">Scratching promotes allergic inflammation and host defense via neurogenic mast cell activation</span>
+              <div class="pub-chips">
+                <span class="pub-journal">Science</span>
+                <span class="pub-year">2025</span>
+                <span class="pub-cite">📖 47</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub">
+            <div class="pub-meta">
+              <span class="pub-title">Interferon-alpha or -beta facilitates SARS-CoV-2 pulmonary vascular infection by inducing ACE2</span>
+              <div class="pub-chips">
+                <span class="pub-journal">Angiogenesis</span>
+                <span class="pub-year">2022</span>
+                <span class="pub-cite">📖 42</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub">
+            <div class="pub-meta">
+              <span class="pub-title">Pericytes contribute to pulmonary vascular remodeling via HIF2α signaling</span>
+              <div class="pub-chips">
+                <span class="pub-journal">EMBO Reports</span>
+                <span class="pub-year">2024</span>
+                <span class="pub-cite">📖 32</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub">
+            <div class="pub-meta">
+              <span class="pub-title">Acute SARS-CoV-2 infection in pregnancy is associated with placental ACE2 shedding</span>
+              <div class="pub-chips">
+                <span class="pub-journal">Am J Pathology</span>
+                <span class="pub-year">2022</span>
+                <span class="pub-cite">📖 13</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pub">
+            <div class="pub-meta">
+              <span class="pub-title">Precision Cut Lung Slices as an Efficient Tool for Ex vivo Pulmonary Vessel Structure and Contractility Studies</span>
+              <div class="pub-chips">
+                <span class="pub-journal">JoVE</span>
+                <span class="pub-year">2021</span>
+                <span class="pub-cite">📖 15</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Sidebar mobile toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+    document.addEventListener('click', e => {
+      if (window.innerWidth <= 900 && !sidebar.contains(e.target) && e.target !== menuBtn)
+        sidebar.classList.remove('open');
+    });
+
+    // Scroll-spy: update active nav item
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('section[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navItems.forEach(n => n.classList.remove('active'));
+          document.querySelector(`.nav-item[data-section="${entry.target.id}"]`)?.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Smooth scroll on nav click
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById(item.dataset.section)?.scrollIntoView({ behavior: 'smooth' });
+        if (window.innerWidth <= 900) sidebar.classList.remove('open');
+      });
+    });
+
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    const root = document.documentElement;
+    function setTheme(m) {
+      root.setAttribute('data-theme', m);
+      root.style.colorScheme = m;
+      localStorage.setItem('theme', m);
+      themeBtn.textContent = m === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
+    }
+    themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+    themeBtn.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
+  </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pericyte HIF2α Remodeling – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family: Poppins, system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; margin-bottom: 28px;
+  }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer; font-weight: 500;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 {
+    font-size: 1.3rem; margin: 2rem 0 0.8rem;
+    padding-bottom: 8px; border-bottom: 2px solid var(--border);
+    color: var(--text);
+  }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; color: var(--text); }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+
+  .journal-badge {
+    display: inline-flex; align-items: center;
+    padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #000; margin-bottom: 8px;
+  }
+  [data-theme="light"] .journal-badge { color: #fff; }
+
+  section { margin: 28px 0; }
+  section p { color: var(--text); }
+
+  ul { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; color: var(--text); }
+  li::marker { color: var(--accent); }
+
+  .fig-placeholder {
+    background: var(--border); border-radius: 14px;
+    padding: 48px 24px; text-align: center;
+    color: var(--muted); font-size: 0.9rem; margin: 16px 0;
+    border: 2px dashed var(--border);
+  }
+
+  .canvas {
+    background: var(--canvas); border: 1px solid var(--canvas-border);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12); margin: 16px 0;
+  }
+  .canvas > img, .canvas > video { display: block; width: 100%; }
+  figcaption {
+    padding: 14px 18px; font-size: 0.92rem; color: var(--muted);
+    border-top: 1px solid var(--canvas-border); line-height: 1.6;
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box {
+    background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2);
+  }
+  .highlight-box p { margin: 0; }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer {
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 0.88rem; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="journal-badge">EMBO Reports · 2024</div>
+      <h1>Pericytes Drive Pulmonary Vascular Remodeling via HIF2α Signaling</h1>
+      <p class="subtitle">Identifying a novel cellular driver of hypoxia-induced vascular disease in the lung</p>
+      <div class="tagrow">
+        <span class="tag">Pulmonary Hypertension</span>
+        <span class="tag">Pericytes</span>
+        <span class="tag">HIF2α</span>
+        <span class="tag">Vascular Remodeling</span>
+        <span class="tag">Hypoxia</span>
+        <span class="tag">Mouse Models</span>
+        <span class="tag">PCLS</span>
+      </div>
+    </header>
+
+    <!-- Overview -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Pulmonary arterial hypertension (PAH) is characterized by progressive, obliterative
+        remodeling of the small pulmonary arteries — a process classically attributed to
+        dysfunction in endothelial cells and smooth muscle cells. This work challenges that
+        canonical view by demonstrating that <strong>pericytes</strong>, a perivascular cell
+        population that wraps around small vessels, are active contributors to vascular
+        remodeling in a <strong>HIF2α-dependent manner</strong>.
+      </p>
+      <p>
+        Using conditional knockout mouse models and precision-cut lung slices, we show that
+        pericyte-specific loss of HIF2α is protective against hypoxia-induced vascular
+        remodeling — placing pericytes upstream of the structural changes that define PAH
+        and suggesting new therapeutic entry points.
+      </p>
+    </section>
+
+    <!-- Background -->
+    <section>
+      <h2>Background &amp; Motivation</h2>
+      <p>
+        Hypoxia is a potent trigger for pulmonary vascular remodeling. At altitude or during
+        chronic lung disease, reduced oxygen activates the <strong>hypoxia-inducible factor
+        (HIF)</strong> transcriptional program. HIF2α, in particular, is expressed in vascular
+        endothelial cells and has been linked to PAH — but its role in non-endothelial
+        perivascular cells had not been systematically investigated.
+      </p>
+      <p>
+        Pericytes are poorly understood in the context of pulmonary vascular disease. They
+        stabilize vessel walls, regulate blood flow, and communicate bidirectionally with
+        endothelial cells. Our hypothesis was that <em>pericytes under hypoxic stress activate
+        HIF2α-driven programs that destabilize the vascular wall and prime pathological remodeling.</em>
+      </p>
+    </section>
+
+    <!-- Approach -->
+    <section>
+      <h2>Experimental Approach</h2>
+
+      <div class="grid-2">
+        <div>
+          <h3>Pericyte-Specific Conditional Knockouts</h3>
+          <p>
+            We generated mice with pericyte-specific deletion of HIF2α (using a
+            PDGFRβ-Cre driver), allowing us to isolate the pericyte-autonomous
+            contribution to remodeling in the context of intact endothelial and
+            smooth muscle cell HIF2α.
+          </p>
+        </div>
+        <div>
+          <h3>Hypoxia-Induced PAH Model</h3>
+          <p>
+            Animals were housed in a normobaric hypoxia chamber (10% O₂) for
+            three weeks — a well-validated model that recapitulates the
+            hemodynamic and structural hallmarks of PAH: elevated RVSP,
+            right ventricular hypertrophy, and medial wall thickening.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Precision Cut Lung Slices (PCLS)</h3>
+          <p>
+            PCLS were prepared from control and conditional knockout mice to
+            directly assess vascular contractility and pericyte morphology
+            in an ex vivo preparation that preserves vessel architecture
+            and cell–cell contacts.
+          </p>
+        </div>
+        <div>
+          <h3>Primary Pericyte Culture</h3>
+          <p>
+            Pulmonary pericytes were isolated and cultured under normoxic
+            and hypoxic conditions to map HIF2α target gene expression
+            and assess paracrine effects on co-cultured endothelial cells.
+          </p>
+        </div>
+      </div>
+
+      <div class="fig-placeholder">
+        [ Figure · Schematic of experimental design and conditional knockout strategy ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Findings -->
+    <section>
+      <h2>Key Findings</h2>
+
+      <div class="highlight-box">
+        <p>
+          <strong>Pericyte-specific HIF2α deletion significantly attenuates hypoxia-induced
+          pulmonary vascular remodeling</strong>, reducing medial wall thickening and
+          improving right ventricular pressure — without affecting systemic hemodynamics.
+        </p>
+      </div>
+
+      <ul>
+        <li>Pericytes in hypoxic lungs upregulate HIF2α and a suite of pro-remodeling target genes, including PDGF-B and angiopoietin-2.</li>
+        <li>Pericyte-specific HIF2α knockout mice show significantly reduced muscularization of small pulmonary vessels after 3 weeks of hypoxia.</li>
+        <li>PCLS from knockout animals exhibit preserved vasodilatory responses compared to remodeled vessels from wild-type hypoxic controls.</li>
+        <li>In vitro, HIF2α-activated pericytes destabilize endothelial monolayer integrity through paracrine angiopoietin-2 secretion.</li>
+        <li>These results position pericytes as an <em>upstream</em> driver of vascular instability, preceding and enabling smooth muscle cell hypertrophy.</li>
+      </ul>
+
+      <div class="fig-placeholder">
+        [ Figure · Histology showing medial wall thickness (WT vs. KO, normoxia vs. hypoxia) ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Significance -->
+    <section>
+      <h2>Significance</h2>
+      <p>
+        This work expands the cellular landscape of PAH pathogenesis beyond the classical
+        endothelial–smooth muscle axis. By showing that pericytes are <em>active, HIF2α-dependent
+        drivers</em> of remodeling, we open a new therapeutic angle: targeting pericyte
+        HIF2α activity could complement existing vasodilatory treatments by addressing the
+        structural remodeling component of PAH that current drugs leave unresolved.
+      </p>
+      <p>
+        More broadly, the findings highlight the importance of heterogeneous perivascular cell
+        populations in vascular biology and encourage re-examination of the pericyte
+        compartment in other vascular diseases where hypoxia plays a role.
+      </p>
+    </section>
+
+    <!-- Citation -->
+    <section>
+      <h2>Publication</h2>
+      <div class="citation-block">
+        H Kim, Y Liu, J Kim, Y Kim, T Klouda, S Fisch, SH Baek, T Liu, S Dahlberg, et al.<br>
+        <strong>"Pericytes contribute to pulmonary vascular remodeling via HIF2α signaling."</strong><br>
+        <em>EMBO Reports</em>, vol. 25(2), p. 616. 2024.
+      </div>
+    </section>
+
+  </article>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  const btn = document.getElementById('themeToggle');
+  btn?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+</body>
+</html>

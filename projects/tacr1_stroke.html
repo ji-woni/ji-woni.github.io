@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tacr1 Neurons in Stroke Recovery – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+    --violet:#a78bfa; --violet-2:#818cf8;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+    --violet:#6d28d9; --violet-2:#4f46e5;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--violet) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .journal-badge {
+    display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, #4c1d95, #6d28d9); color: #fff;
+  }
+  .award-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, #92400e, #b45309); color: #fef3c7;
+  }
+  .ongoing-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 13px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+    background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.4);
+    color: var(--violet); letter-spacing: 0.04em;
+  }
+  .ongoing-pill::before {
+    content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--violet); animation: pulse-dot 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+
+  section { margin: 28px 0; }
+  ul, ol { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; }
+  li::marker { color: var(--accent); }
+
+  .hypothesis-fig {
+    width: 100%; max-width: 680px; margin: 24px auto; display: block;
+    border-radius: 14px; overflow: hidden;
+    background: linear-gradient(135deg, #12012a, #1e1b4b, #0f0c29);
+    border: 1px solid rgba(167,139,250,0.2);
+    box-shadow: 0 8px 40px rgba(109,40,217,0.25);
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .aim-card {
+    border-radius: 14px; padding: 24px;
+    border: 1px solid rgba(167,139,250,0.2);
+    position: relative; overflow: hidden;
+  }
+  .aim-card.aim1 { background: linear-gradient(135deg, rgba(45,212,191,0.06), rgba(56,189,248,0.04)); border-color: rgba(45,212,191,0.2); }
+  .aim-card.aim2 { background: linear-gradient(135deg, rgba(167,139,250,0.07), rgba(129,140,248,0.05)); border-color: rgba(167,139,250,0.2); }
+  .aim-num {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--muted); margin-bottom: 6px; text-transform: uppercase;
+  }
+  .aim-card h3 { margin-top: 0; font-size: 1rem; }
+  .aim1 h3 { color: var(--accent); }
+  .aim2 h3 { color: var(--violet); }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.07); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box {
+    background: rgba(15,118,110,0.05); border-color: rgba(15,118,110,0.2);
+  }
+  .highlight-box p { margin: 0; }
+
+  .violet-box {
+    background: rgba(109,40,217,0.08); border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  .violet-box p { margin: 0; }
+
+  .tech-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .tech-pill {
+    padding: 5px 13px; border-radius: 20px; font-size: 0.8rem;
+    background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25);
+    color: var(--violet);
+  }
+
+  .award-box {
+    border-radius: 14px; padding: 28px 32px; margin: 28px 0;
+    background: linear-gradient(135deg, #1e1b4b 0%, #12012a 100%);
+    border: 1px solid rgba(167,139,250,0.3);
+    box-shadow: 0 6px 32px rgba(109,40,217,0.2);
+    display: grid; gap: 14px;
+  }
+  [data-theme="light"] .award-box {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border-color: rgba(109,40,217,0.25);
+  }
+  .award-box-title {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--violet); margin-bottom: 4px;
+  }
+  .award-box h3 { color: var(--text); font-size: 1.15rem; margin: 0 0 4px; }
+  .award-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .award-stat { display: flex; flex-direction: column; gap: 2px; }
+  .award-stat-val { font-size: 1.4rem; font-weight: 600; color: var(--violet); }
+  .award-stat-label { font-size: 0.8rem; color: var(--muted); }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="badge-row">
+        <span class="journal-badge">AHA Predoctoral Fellowship · 2026–2027</span>
+        <span class="award-badge">★ Top 3% · Funded</span>
+        <span class="ongoing-pill">ONGOING</span>
+      </div>
+      <h1>The Role of Tacr1 Neurons in Stroke Recovery</h1>
+      <p class="subtitle">How a rare inhibitory neuron population orchestrates vascular repair and waste clearance after ischemic injury</p>
+      <div class="tagrow">
+        <span class="tag">Stroke Recovery</span>
+        <span class="tag">Tacr1 Neurons</span>
+        <span class="tag">Neurovascular Coupling</span>
+        <span class="tag">Angiogenesis</span>
+        <span class="tag">Glymphatic System</span>
+        <span class="tag">NREM Sleep</span>
+        <span class="tag">Cortical Inhibitory Neurons</span>
+      </div>
+    </header>
+
+    <!-- Hypothesis figure -->
+    <section>
+      <h2>Central Hypothesis</h2>
+      <p>
+        Tacr1 neurons are a functionally specialized subset of cortical inhibitory neurons that
+        act as <strong>master orchestrators of cerebrovascular health</strong>. After ischemic
+        stroke, their activity drives both angiogenic revascularization of the penumbra (Aim 1)
+        and arteriole-pulsation–driven glymphatic waste clearance during sleep (Aim 2).
+      </p>
+
+      <!-- Animated SVG hypothesis diagram -->
+      <svg class="hypothesis-fig" viewBox="0 0 500 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="pg_glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="rgba(167,139,250,0.45)"/>
+            <stop offset="100%" stop-color="rgba(167,139,250,0)"/>
+          </radialGradient>
+          <radialGradient id="pg_stroke_glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="rgba(248,113,113,0.5)"/>
+            <stop offset="100%" stop-color="rgba(248,113,113,0)"/>
+          </radialGradient>
+
+          <!-- Motion paths for particles -->
+          <path id="pg_d1"  d="M250,145 C235,128 215,112 192,96"/>
+          <path id="pg_d2"  d="M250,145 C250,128 250,111 250,95"/>
+          <path id="pg_d3"  d="M250,145 C265,128 285,112 308,96"/>
+          <path id="pg_ax1" d="M250,170 C222,192 188,210 156,230"/>
+          <path id="pg_ax2" d="M250,170 C278,192 312,210 344,230"/>
+          <path id="pg_stk" d="M360,75 C330,95 295,118 262,140"/>
+        </defs>
+
+        <!-- Background subtle grid -->
+        <rect width="500" height="340" fill="url(#pg_bg)" rx="14"/>
+        <line x1="0" y1="170" x2="500" y2="170" stroke="rgba(167,139,250,0.05)" stroke-width="1"/>
+        <line x1="250" y1="0" x2="250" y2="340" stroke="rgba(167,139,250,0.05)" stroke-width="1"/>
+
+        <!-- ── STROKE ZONE (top right) ── -->
+        <circle cx="370" cy="72" r="46" fill="url(#pg_stroke_glow)"/>
+        <circle cx="370" cy="72" r="38" stroke="rgba(248,113,113,0.3)" stroke-width="1.5" stroke-dasharray="6 4" fill="rgba(248,113,113,0.06)"/>
+        <circle cx="370" cy="72" r="26" stroke="rgba(248,113,113,0.5)" stroke-width="2" fill="rgba(248,113,113,0.1)"/>
+        <!-- Lightning bolt -->
+        <path d="M373,50 L365,68 L373,68 L363,93" stroke="rgba(248,113,113,0.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="338" y="118" font-size="9" fill="rgba(248,113,113,0.7)" font-family="Poppins,system-ui" font-weight="600" letter-spacing="0.06em">ISCHEMIC STROKE</text>
+        <text x="349" y="131" font-size="7.5" fill="rgba(248,113,113,0.45)" font-family="Poppins,system-ui">Penumbra / Infarct</text>
+
+        <!-- Arrow from stroke to Tacr1 -->
+        <path d="M350,108 C320,122 290,135 265,148" stroke="rgba(248,113,113,0.4)" stroke-width="1.5" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+        <circle r="2.5" fill="rgba(248,113,113,0.8)">
+          <animateMotion dur="1.4s" repeatCount="indefinite" begin="0s"><mpath href="#pg_stk"/></animateMotion>
+        </circle>
+
+        <!-- ── TACR1 NEURON (center) ── -->
+        <circle cx="250" cy="157" r="42" fill="url(#pg_glow)"/>
+        <!-- Dendrites -->
+        <path d="M250,145 C235,128 215,112 192,96"  stroke="rgba(167,139,250,0.55)" stroke-width="2"   stroke-linecap="round"/>
+        <path d="M250,145 C250,128 250,111 250,95"  stroke="rgba(167,139,250,0.5)"  stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M250,145 C265,128 285,112 308,96"  stroke="rgba(167,139,250,0.45)" stroke-width="1.7" stroke-linecap="round"/>
+        <!-- Dendrite tips -->
+        <circle cx="192" cy="96" r="3" fill="rgba(167,139,250,0.5)"/>
+        <circle cx="250" cy="95" r="3" fill="rgba(167,139,250,0.45)"/>
+        <circle cx="308" cy="96" r="3" fill="rgba(167,139,250,0.4)"/>
+        <!-- Soma outer ring (pulsing) -->
+        <circle cx="250" cy="157" r="24" stroke="rgba(167,139,250,0.2)" stroke-width="1.2" fill="none">
+          <animate attributeName="r"       values="24;30;24" dur="2.6s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.8;0.1;0.8" dur="2.6s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Soma body -->
+        <circle cx="250" cy="157" r="18" fill="rgba(167,139,250,0.15)" stroke="rgba(167,139,250,0.85)" stroke-width="2.5"/>
+        <circle cx="250" cy="157" r="8"  fill="rgba(167,139,250,0.7)"/>
+        <!-- NO marker (nitric oxide) -->
+        <text x="233" y="155" font-size="8" fill="rgba(255,255,255,0.55)" font-family="Poppins,system-ui" font-weight="600">NO</text>
+
+        <!-- Axon trunk -->
+        <line x1="250" y1="175" x2="250" y2="195" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"/>
+        <!-- Axon branches -->
+        <path d="M250,195 C222,210 188,225 156,244" stroke="rgba(255,255,255,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M250,195 C278,210 312,225 344,244" stroke="rgba(255,255,255,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+
+        <!-- Tacr1 label -->
+        <text x="215" y="153" font-size="10" fill="rgba(255,255,255,0.7)" font-family="Poppins,system-ui" font-weight="600">Tacr1</text>
+        <text x="210" y="165" font-size="7.5"  fill="rgba(167,139,250,0.55)" font-family="Poppins,system-ui">SST · Chodl · NOS1</text>
+
+        <!-- ── AIM 1 — Angiogenesis (bottom-left) ── -->
+        <!-- Vessel tree -->
+        <line x1="116" y1="248" x2="116" y2="270" stroke="rgba(45,212,191,0.6)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="116" y1="256" x2="100" y2="274" stroke="rgba(45,212,191,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="116" y1="256" x2="132" y2="274" stroke="rgba(45,212,191,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="100" y1="268" x2="92"  y2="282" stroke="rgba(45,212,191,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="132" y1="268" x2="140" y2="282" stroke="rgba(45,212,191,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="116" cy="248" r="5"  fill="rgba(45,212,191,0.35)" stroke="rgba(45,212,191,0.7)" stroke-width="1.5"/>
+        <!-- Netrin-1 label -->
+        <text x="72"  y="298" font-size="8" fill="rgba(45,212,191,0.6)"  font-family="Poppins,system-ui" font-weight="500">via Netrin-1 (Ntn1)</text>
+        <!-- Box + label -->
+        <rect x="58" y="304" width="122" height="26" rx="6" fill="rgba(45,212,191,0.1)" stroke="rgba(45,212,191,0.3)" stroke-width="1"/>
+        <text x="74"  y="321" font-size="9" fill="rgba(45,212,191,0.85)" font-family="Poppins,system-ui" font-weight="600">AIM 1 · Angiogenesis</text>
+
+        <!-- ── AIM 2 — Glymphatic (bottom-right) ── -->
+        <!-- Arteriole with pulsation waves -->
+        <path d="M320,244 L380,244" stroke="rgba(167,139,250,0.65)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M325,236 Q336,229 347,236 Q358,229 369,236 Q380,229 391,236" stroke="rgba(167,139,250,0.45)" stroke-width="1.5" fill="none" stroke-linecap="round">
+          <animate attributeName="opacity" values="0.7;0.15;0.7" dur="1.8s" repeatCount="indefinite"/>
+        </path>
+        <path d="M325,252 Q336,259 347,252 Q358,259 369,252 Q380,259 391,252" stroke="rgba(167,139,250,0.45)" stroke-width="1.5" fill="none" stroke-linecap="round">
+          <animate attributeName="opacity" values="0.7;0.15;0.7" dur="1.8s" repeatCount="indefinite" begin="0.2s"/>
+        </path>
+        <!-- CSF flow arrows -->
+        <path d="M306,270 Q316,264 320,255" stroke="rgba(129,140,248,0.5)" stroke-width="1.2" stroke-dasharray="3 2" fill="none" stroke-linecap="round"/>
+        <!-- Glymphatic label -->
+        <text x="298" y="298" font-size="8" fill="rgba(167,139,250,0.6)" font-family="Poppins,system-ui" font-weight="500">NREM Sleep Pulsations</text>
+        <rect x="296" y="304" width="136" height="26" rx="6" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+        <text x="307" y="321" font-size="9" fill="rgba(167,139,250,0.85)" font-family="Poppins,system-ui" font-weight="600">AIM 2 · Glymphatic</text>
+
+        <!-- ── Animated particles ── -->
+        <!-- Dendrite signals (reversed — from tips to soma) -->
+        <circle r="2.8" fill="rgba(255,255,255,0.9)">
+          <animateMotion dur="1.7s" repeatCount="indefinite" begin="0s"   keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#pg_d1"/></animateMotion>
+        </circle>
+        <circle r="2.5" fill="rgba(167,139,250,0.95)">
+          <animateMotion dur="1.9s" repeatCount="indefinite" begin="0.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#pg_d2"/></animateMotion>
+        </circle>
+        <circle r="2.3" fill="rgba(255,255,255,0.75)">
+          <animateMotion dur="1.8s" repeatCount="indefinite" begin="1.1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#pg_d3"/></animateMotion>
+        </circle>
+        <!-- Axon output particles -->
+        <circle r="2.8" fill="rgba(45,212,191,0.95)">
+          <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.3s"><mpath href="#pg_ax1"/></animateMotion>
+        </circle>
+        <circle r="2.8" fill="rgba(167,139,250,0.95)">
+          <animateMotion dur="1.5s" repeatCount="indefinite" begin="1.05s"><mpath href="#pg_ax2"/></animateMotion>
+        </circle>
+      </svg>
+    </section>
+
+    <!-- Background -->
+    <section>
+      <h2>Background</h2>
+      <p>
+        Ischemic stroke is the leading cause of long-term disability worldwide, yet therapeutic
+        options after the acute window remain severely limited. Recovery depends on two intertwined
+        processes: <strong>revascularization</strong> of the ischemic penumbra and
+        <strong>clearance of neurotoxic metabolites</strong> that accumulate after injury.
+        Both processes are tightly coupled to neural activity and cerebrovascular tone.
+      </p>
+      <div class="violet-box">
+        <p>
+          <strong>The central question:</strong> Is there a single neuronal population that can
+          coordinately regulate both vascular repair and metabolic clearance after stroke —
+          and can it be targeted to improve recovery?
+        </p>
+      </div>
+      <p>
+        <strong>Tacr1 (tachykinin receptor 1) neurons</strong> are a remarkably rare cortical
+        interneuron population — comprising only ~1% of all cortical neurons — defined by
+        co-expression of <em>Sst</em> (somatostatin), <em>Chodl</em>, and <em>Nos1</em>
+        (neuronal nitric oxide synthase). Their NOS1-derived nitric oxide (NO) output makes them
+        uniquely capable of driving vasodilation and modulating cerebrovascular tone directly.
+      </p>
+      <p>
+        A key preliminary observation from the lab: single-molecule FISH reveals that
+        <em>Netrin-1</em> (Ntn1), a potent pro-angiogenic guidance cue, is expressed
+        <strong>50× higher</strong> in Tacr1 neurons compared to all other cortical cell types.
+        Tacr1 neuron activity also correlates tightly with arteriole pulsations during NREM
+        sleep — the oscillatory driver of glymphatic flow.
+      </p>
+    </section>
+
+    <!-- Two Aims -->
+    <section>
+      <h2>Specific Aims</h2>
+      <div class="grid-2">
+        <div class="aim-card aim1">
+          <div class="aim-num">Aim 1</div>
+          <h3>Tacr1 Neurons Drive Angiogenesis via Netrin-1</h3>
+          <p>
+            Tests whether Tacr1 neurons promote revascularization in the peri-infarct
+            penumbra through their exceptional <em>Ntn1</em> expression. Tacr1 ablation
+            (AAV2-EF1a-flex-taCasp3-TEVp in Tacr1CreER mice) reduces post-stroke vessel
+            density in penumbra measured by LSCI and 2-photon imaging — and Netrin-1
+            replacement rescues this deficit.
+          </p>
+          <div class="tech-pills">
+            <span class="tech-pill">Tacr1CreER-tdT mice</span>
+            <span class="tech-pill">Photothrombosis</span>
+            <span class="tech-pill">LSCI</span>
+            <span class="tech-pill">2P Imaging</span>
+            <span class="tech-pill">AAV Caspase Ablation</span>
+          </div>
+        </div>
+        <div class="aim-card aim2">
+          <div class="aim-num">Aim 2</div>
+          <h3>Tacr1 Neurons Sustain Glymphatic Clearance via Arteriole Pulsations</h3>
+          <p>
+            Tests whether Tacr1 neural activity during NREM sleep drives arteriole
+            pulsations that power glymphatic CSF flow. hM4Di DREADDs silence Tacr1
+            neurons selectively; FITC-dextran CSF tracer + Evans Blue edema quantification
+            through a PDMS cranial window measures glymphatic clearance.
+          </p>
+          <div class="tech-pills">
+            <span class="tech-pill">hM4Di DREADDs</span>
+            <span class="tech-pill">PDMS Cranial Window</span>
+            <span class="tech-pill">FITC-dextran CSF Tracer</span>
+            <span class="tech-pill">Evans Blue</span>
+            <span class="tech-pill">Sleep EEG</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preliminary Data -->
+    <section>
+      <h2>Preliminary Data</h2>
+      <p>
+        The grant was supported by compelling preliminary evidence establishing feasibility
+        and mechanistic plausibility:
+      </p>
+      <ul>
+        <li>
+          <strong>Vessel density reduction:</strong> Tacr1 neuron ablation (caspase-3 strategy)
+          prior to photothrombotic stroke significantly reduced vessel density in the peri-infarct
+          penumbra, measured by LSCI perfusion maps and post-hoc lectin staining.
+        </li>
+        <li>
+          <strong>Netrin-1 FISH:</strong> smFISH in cortical sections confirms <em>Ntn1</em>
+          transcript levels 50× enriched in <em>Tacr1</em><sup>+</sup> cells vs. all other
+          labeled neurons — making Tacr1 neurons the dominant Netrin-1 source in cortex.
+        </li>
+        <li>
+          <strong>Sleep coupling:</strong> In vivo GCaMP6f Ca²⁺ imaging synchronized with
+          EEG/EMG demonstrates that Tacr1 neuron firing bouts correlate tightly with
+          arteriole diameter oscillations specifically during NREM sleep, not REM or wake.
+        </li>
+        <li>
+          <strong>DREADD validation:</strong> Chemogenetic silencing of Tacr1 neurons during
+          sleep reduces arteriole pulsation amplitude and decreases FITC-dextran CSF tracer
+          penetration depth, consistent with impaired glymphatic influx.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Methods -->
+    <section>
+      <h2>Key Methods &amp; Approaches</h2>
+      <h3>Transgenic Models</h3>
+      <div class="tech-pills">
+        <span class="tech-pill">Tacr1CreER × Rosa-tdTomato</span>
+        <span class="tech-pill">Tacr1CreER × GCaMP6f</span>
+        <span class="tech-pill">Tamoxifen induction</span>
+      </div>
+      <h3>Cell Ablation</h3>
+      <div class="tech-pills">
+        <span class="tech-pill">AAV2-EF1a-flex-taCasp3-TEVp</span>
+        <span class="tech-pill">Stereotaxic injection</span>
+        <span class="tech-pill">Perilesional targeting</span>
+      </div>
+      <h3>Stroke Model</h3>
+      <div class="tech-pills">
+        <span class="tech-pill">Rose Bengal photothrombosis</span>
+        <span class="tech-pill">Controlled infarct size</span>
+        <span class="tech-pill">Somatosensory cortex targeting</span>
+      </div>
+      <h3>Vascular Imaging</h3>
+      <div class="tech-pills">
+        <span class="tech-pill">Laser speckle contrast imaging (LSCI)</span>
+        <span class="tech-pill">2-photon microscopy</span>
+        <span class="tech-pill">Lectin perfusion labeling</span>
+        <span class="tech-pill">Vessel density morphometry</span>
+      </div>
+      <h3>Glymphatic &amp; Sleep</h3>
+      <div class="tech-pills">
+        <span class="tech-pill">PDMS cranial window</span>
+        <span class="tech-pill">FITC-dextran (70 kDa) CSF injection</span>
+        <span class="tech-pill">Evans Blue vascular tracer</span>
+        <span class="tech-pill">EEG/EMG polysomnography</span>
+        <span class="tech-pill">hM4Di DREADD silencing</span>
+      </div>
+    </section>
+
+    <!-- Significance -->
+    <section>
+      <h2>Significance</h2>
+      <div class="highlight-box">
+        <p>
+          Ischemic stroke affects ~800,000 Americans annually. Despite decades of research,
+          no neuroprotective therapy has translated from bench to bedside. This project
+          proposes a fundamentally new framework: <strong>targeting a single inhibitory neuron
+          subtype (Tacr1) to simultaneously promote vascular recovery and cognitive
+          rehabilitation</strong> after stroke.
+        </p>
+      </div>
+      <p>
+        If Tacr1 neurons are confirmed as master regulators of both angiogenesis and glymphatic
+        clearance, they become a tractable therapeutic target for activating endogenous
+        neurovascular repair mechanisms. The approach is complementary to — not competitive
+        with — thrombolysis and thrombectomy, and addresses the chronic phase where no
+        current treatments exist.
+      </p>
+      <p>
+        More broadly, this work advances understanding of <strong>neurovascular coupling
+        beyond the classical NVC paradigm</strong>: rather than moment-to-moment coupling,
+        Tacr1 neurons may shape vascular structure and clearance over the timescale of
+        recovery (days to weeks), a temporally extended form of brain–vessel communication
+        that has not been systematically explored.
+      </p>
+    </section>
+
+    <!-- Award box -->
+    <div class="award-box">
+      <div>
+        <div class="award-box-title">Grant Award</div>
+        <h3>AHA Predoctoral Fellowship</h3>
+        <p style="color:var(--muted);font-size:0.9rem;margin:4px 0 0;">
+          American Heart Association · Awarded 2026–2027
+        </p>
+      </div>
+      <div class="award-stats">
+        <div class="award-stat">
+          <span class="award-stat-val">Top 3%</span>
+          <span class="award-stat-label">Percentile rank</span>
+        </div>
+        <div class="award-stat">
+          <span class="award-stat-val">$70,676</span>
+          <span class="award-stat-label">Total award</span>
+        </div>
+        <div class="award-stat">
+          <span class="award-stat-val">2026–2027</span>
+          <span class="award-stat-label">Award period</span>
+        </div>
+        <div class="award-stat">
+          <span class="award-stat-val">Ongoing</span>
+          <span class="award-stat-label">PhD project</span>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <footer>
+    <p>Jiwon Kim · PhD Candidate, University of Pittsburgh · Neurovascular Biology</p>
+  </footer>
+</div>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) html.setAttribute('data-theme', saved);
+  btn.addEventListener('click', () => {
+    const t = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Placental ACE2 & SARS-CoV-2 – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+  .journal-badge {
+    display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
+  }
+  [data-theme="light"] .journal-badge { color: #fff; }
+
+  section { margin: 28px 0; }
+  ul { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; }
+  li::marker { color: var(--accent); }
+
+  .fig-placeholder {
+    background: var(--border); border-radius: 14px;
+    padding: 48px 24px; text-align: center;
+    color: var(--muted); font-size: 0.9rem; margin: 16px 0;
+    border: 2px dashed var(--border);
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
+  .highlight-box p { margin: 0; }
+
+  .context-box {
+    background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .context-box { background: rgba(8,145,178,0.05); border-color: rgba(8,145,178,0.2); }
+  .context-box .label {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;
+  }
+  .context-box p { margin: 0; font-size: 0.96rem; }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="journal-badge">Am J Pathology · 2022</div>
+      <h1>Acute SARS-CoV-2 Infection in Pregnancy Is Associated with Placental ACE2 Shedding</h1>
+      <p class="subtitle">How COVID-19 disrupts the ACE2 axis at the maternal-fetal interface</p>
+      <div class="tagrow">
+        <span class="tag">SARS-CoV-2</span>
+        <span class="tag">Placenta</span>
+        <span class="tag">ACE2</span>
+        <span class="tag">Maternal-Fetal Interface</span>
+        <span class="tag">COVID-19 in Pregnancy</span>
+        <span class="tag">RAAS</span>
+      </div>
+    </header>
+
+    <!-- Overview -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Pregnancy represents a unique immunological state in which the maternal system must
+        tolerate a semi-allogeneic fetus while maintaining defense against pathogens. SARS-CoV-2
+        infection during pregnancy was associated with a range of adverse outcomes — yet the
+        molecular mechanisms at the placental interface remained poorly characterized.
+      </p>
+      <p>
+        This study demonstrates that acute SARS-CoV-2 infection during pregnancy is associated
+        with <strong>shedding of placental ACE2</strong>, the primary entry receptor for SARS-CoV-2.
+        This finding connects two important threads: the vulnerability of ACE2-expressing tissues
+        to SARS-CoV-2 infection, and the broader role of ACE2 as a regulator of the
+        renin–angiotensin–aldosterone system (RAAS) at the maternal-fetal interface.
+      </p>
+
+      <div class="context-box">
+        <div class="label">Connection to Broader Research</div>
+        <p>
+          This work complements the group's findings in pulmonary vascular cells
+          (Klouda et al., <em>Angiogenesis</em> 2022) showing that interferon signaling
+          upregulates ACE2 in vascular tissue — together pointing to a systemic
+          ACE2 dysregulation across multiple organ systems in COVID-19.
+        </p>
+      </div>
+    </section>
+
+    <!-- Background -->
+    <section>
+      <h2>Background &amp; Motivation</h2>
+      <p>
+        ACE2 is a carboxypeptidase that cleaves angiotensin II to angiotensin-(1-7),
+        negatively regulating the vasoconstricting, pro-inflammatory arm of the RAAS.
+        It is highly expressed in the placenta — particularly in syncytiotrophoblasts —
+        where it plays roles in placental vascular tone, nutrient transport, and immune regulation.
+      </p>
+      <p>
+        When SARS-CoV-2 binds and enters cells via ACE2, it triggers receptor internalization
+        and subsequent proteolytic shedding of the ACE2 ectodomain into the circulation.
+        In the placenta, loss of surface ACE2 activity could shift the local RAAS balance
+        toward a pro-inflammatory, vasoconstrictive state — potentially contributing to
+        placental dysfunction and adverse pregnancy outcomes observed in COVID-19.
+      </p>
+    </section>
+
+    <!-- Approach -->
+    <section>
+      <h2>Experimental Approach</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Clinical Cohort</h3>
+          <p>
+            Placental tissue and maternal serum/plasma were collected from a prospectively
+            enrolled cohort of pregnant women with confirmed acute SARS-CoV-2 infection
+            and gestational-age-matched uninfected controls at delivery.
+          </p>
+        </div>
+        <div>
+          <h3>ACE2 Shedding Quantification</h3>
+          <p>
+            Soluble ACE2 (sACE2) levels were measured in maternal plasma by ELISA.
+            Placental ACE2 expression was assessed by immunohistochemistry and
+            Western blot, and localized to specific cell types by
+            immunofluorescence co-staining.
+          </p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3>Placental Viral Detection</h3>
+          <p>
+            SARS-CoV-2 RNA and nucleocapsid protein were assessed in placental tissue
+            by RT-PCR and immunofluorescence to determine whether the placenta itself
+            was directly infected, or whether the ACE2 changes were a systemic response.
+          </p>
+        </div>
+        <div>
+          <h3>RAAS Axis Assessment</h3>
+          <p>
+            Angiotensin II and angiotensin-(1-7) levels were measured to determine
+            whether ACE2 loss was functionally reflected in a shift in the local
+            RAAS balance within the placental compartment.
+          </p>
+        </div>
+      </div>
+
+      <div class="fig-placeholder">
+        [ Figure · Placental ACE2 IHC: COVID-positive vs. control pregnancies ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Findings -->
+    <section>
+      <h2>Key Findings</h2>
+
+      <div class="highlight-box">
+        <p>
+          <strong>Acute SARS-CoV-2 infection in pregnancy is associated with significantly
+          elevated soluble ACE2 in maternal plasma and reduced placental surface ACE2 expression</strong>,
+          consistent with virus-driven receptor shedding at the maternal-fetal interface.
+        </p>
+      </div>
+
+      <ul>
+        <li>Plasma sACE2 is significantly elevated in SARS-CoV-2-positive pregnancies compared to matched controls at delivery.</li>
+        <li>Placental ACE2 protein is reduced at the syncytiotrophoblast surface in COVID-19-affected placentas, with the loss concentrated in areas of histological injury.</li>
+        <li>SARS-CoV-2 RNA and nucleocapsid protein are detectable in a subset of placentas, confirming direct viral infection of placental tissue in some cases.</li>
+        <li>The shift in the angiotensin II / angiotensin-(1-7) ratio in affected placentas is consistent with functional loss of ACE2 carboxypeptidase activity.</li>
+        <li>ACE2 shedding correlates with markers of placental inflammation, suggesting it may contribute to — or reflect — local inflammatory injury.</li>
+      </ul>
+
+      <div class="fig-placeholder">
+        [ Figure · Plasma sACE2 levels: COVID-positive vs. control, stratified by disease severity ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Significance -->
+    <section>
+      <h2>Significance</h2>
+      <p>
+        These findings have several clinical and mechanistic implications:
+      </p>
+      <ul>
+        <li><strong>Placental dysfunction:</strong> Loss of ACE2-mediated angiotensin II degradation could promote local vasoconstriction and inflammation, contributing to placental insufficiency and the elevated rates of preeclampsia-like syndrome observed in COVID-19 pregnancies.</li>
+        <li><strong>Fetal risk:</strong> Disruption of placental RAAS regulation may affect fetal nutrient delivery and vascular development, with potential downstream consequences for fetal growth.</li>
+        <li><strong>Biomarker potential:</strong> Elevated plasma sACE2 may serve as a circulating biomarker of placental ACE2 shedding in pregnant COVID-19 patients.</li>
+        <li><strong>Mechanistic link:</strong> Combined with the group's findings in pulmonary vascular cells, these data suggest that ACE2 dysregulation is a conserved feature of SARS-CoV-2 pathology across multiple vascular/epithelial compartments.</li>
+      </ul>
+    </section>
+
+    <!-- Citation -->
+    <section>
+      <h2>Publication</h2>
+      <div class="citation-block">
+        ES Taglauer, EM Wachman, L Juttukonda, T Klouda, J Kim, Q Wang, et al.<br>
+        <strong>"Acute severe acute respiratory syndrome coronavirus 2 infection in pregnancy is associated
+        with placental angiotensin-converting enzyme 2 shedding."</strong><br>
+        <em>The American Journal of Pathology</em>, vol. 192(4), pp. 595–603. 2022.
+      </div>
+    </section>
+
+  </article>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+</body>
+</html>

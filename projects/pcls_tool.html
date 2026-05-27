@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Precision Cut Lung Slices – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+
+  .journal-badge {
+    display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
+  }
+  [data-theme="light"] .journal-badge { color: #fff; }
+
+  section { margin: 28px 0; }
+
+  ul, ol { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; }
+  li::marker { color: var(--accent); }
+
+  .fig-placeholder {
+    background: var(--border); border-radius: 14px;
+    padding: 48px 24px; text-align: center;
+    color: var(--muted); font-size: 0.9rem; margin: 16px 0;
+    border: 2px dashed var(--border);
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  .grid-3 { display: grid; gap: 16px; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
+  .highlight-box p { margin: 0; }
+
+  .advantage-card {
+    padding: 16px 18px; border-radius: 12px;
+    background: rgba(45,212,191,0.05); border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .advantage-card:hover { border-color: var(--accent); }
+  .advantage-card .icon { font-size: 1.3rem; margin-bottom: 8px; }
+  .advantage-card strong { display: block; font-size: 0.93rem; margin-bottom: 4px; }
+  .advantage-card p { margin: 0; font-size: 0.84rem; color: var(--muted); }
+
+  .protocol-step {
+    display: flex; gap: 14px; padding: 14px;
+    border-left: 3px solid var(--border); margin-bottom: -1px;
+    background: rgba(45,212,191,0.03);
+  }
+  .protocol-step:first-child { border-radius: 10px 10px 0 0; }
+  .protocol-step:last-child  { border-radius: 0 0 10px 10px; margin-bottom: 0; }
+  .protocol-step:hover { border-left-color: var(--accent); }
+  .step-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #000; font-weight: 700; font-size: 0.78rem;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  [data-theme="light"] .step-num { color: #fff; }
+  .protocol-step strong { display: block; font-size: 0.92rem; margin-bottom: 2px; }
+  .protocol-step p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="journal-badge">JoVE · 2021</div>
+      <h1>Precision Cut Lung Slices as an Efficient Ex Vivo Tool for Pulmonary Vessel Studies</h1>
+      <p class="subtitle">Establishing and validating a reproducible platform for pulmonary vascular structure and contractility</p>
+      <div class="tagrow">
+        <span class="tag">PCLS</span>
+        <span class="tag">Ex Vivo</span>
+        <span class="tag">Vascular Contractility</span>
+        <span class="tag">Pulmonary Vasculature</span>
+        <span class="tag">Methodology</span>
+        <span class="tag">Live Imaging</span>
+        <span class="tag">Mouse Lung</span>
+      </div>
+    </header>
+
+    <!-- Overview -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Studying pulmonary vascular biology presents a persistent methodological challenge:
+        isolated cell culture strips away the architectural and mechanical context that defines
+        vascular function, while whole-animal preparations are too complex for controlled
+        pharmacological interrogation. <strong>Precision-cut lung slices (PCLS)</strong>
+        occupy a productive middle ground — a thin, viable ex vivo preparation that preserves
+        vessel architecture, cell–cell contacts, and dynamic responsiveness to vasoactive stimuli.
+      </p>
+      <p>
+        This JoVE protocol paper establishes and validates PCLS as an efficient tool specifically
+        for <strong>pulmonary vessel structure and contractility studies</strong>, providing a
+        detailed, reproducible workflow from tissue preparation through live-imaging analysis
+        that can be adopted by the vascular biology community.
+      </p>
+    </section>
+
+    <!-- The Problem PCLS Solves -->
+    <section>
+      <h2>Why PCLS? Advantages Over Alternatives</h2>
+      <div class="grid-3">
+        <div class="advantage-card">
+          <div class="icon">🏗️</div>
+          <strong>Preserved Architecture</strong>
+          <p>Vessels remain in their native extracellular matrix and retain perivascular cells (pericytes, smooth muscle cells) in proper spatial relationship.</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">⚡</div>
+          <strong>Functional Responsiveness</strong>
+          <p>Vessels in PCLS contract and dilate in response to vasoconstrictors (endothelin-1, KCl) and vasodilators (acetylcholine, NO donors), enabling pharmacological profiling.</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">🔬</div>
+          <strong>Live Imaging Compatible</strong>
+          <p>Thin slices (150–200 µm) are compatible with confocal live imaging, enabling real-time visualization of vascular tone changes and cell behavior.</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">🧪</div>
+          <strong>Paired Conditions</strong>
+          <p>Multiple slices from a single animal allow within-animal comparison of different drug conditions, reducing biological variability and animal use.</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">🐭</div>
+          <strong>Genetic Model Compatible</strong>
+          <p>PCLS from transgenic or knockout mice can be directly compared to controls, bridging in vivo genetics with ex vivo functional readouts.</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">📏</div>
+          <strong>Size-Selectivity</strong>
+          <p>Small pulmonary arteries (50–200 µm diameter) — the vessels most relevant to PAH — are well-preserved and accessible for targeted analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Protocol -->
+    <section>
+      <h2>Protocol Overview</h2>
+      <p>The workflow as established in this paper proceeds in five main stages:</p>
+
+      <div>
+        <div class="protocol-step">
+          <div class="step-num">1</div>
+          <div>
+            <strong>Lung Inflation & Agarose Instillation</strong>
+            <p>Low-melting-point agarose is instilled into the lungs via tracheal cannulation to provide structural support during slicing. Critical: agarose temperature and concentration must be optimized to preserve cell viability.</p>
+          </div>
+        </div>
+        <div class="protocol-step">
+          <div class="step-num">2</div>
+          <div>
+            <strong>Vibratome Slicing</strong>
+            <p>Solidified lungs are sliced at 150–200 µm thickness using a vibratome. Optimal vibration frequency and advance speed parameters are reported for consistent, damage-free slices.</p>
+          </div>
+        </div>
+        <div class="protocol-step">
+          <div class="step-num">3</div>
+          <div>
+            <strong>Agarose Removal & Recovery Incubation</strong>
+            <p>Slices are incubated at 37°C in DMEM to liquefy and wash out the agarose while cells recover functional activity. Viability is confirmed by live/dead staining.</p>
+          </div>
+        </div>
+        <div class="protocol-step">
+          <div class="step-num">4</div>
+          <div>
+            <strong>Contractility Assay Under Live Imaging</strong>
+            <p>Slices are mounted in a perfusion chamber on an inverted confocal microscope. Vasoactive agents are applied and vessel lumen area is tracked over time to quantify contractile responses.</p>
+          </div>
+        </div>
+        <div class="protocol-step">
+          <div class="step-num">5</div>
+          <div>
+            <strong>Post-Assay Fixation & Structural Analysis</strong>
+            <p>Following functional assays, slices can be fixed for immunofluorescence (αSMA, CD31, NG2) to assess vessel wall composition and structural remodeling markers.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fig-placeholder">
+        [ Figure · Step-by-step schematic of PCLS preparation workflow ]<br>
+        <small>Add figure when available — see JoVE video protocol for reference</small>
+      </div>
+    </section>
+
+    <!-- Validation -->
+    <section>
+      <h2>Validation &amp; Key Results</h2>
+
+      <div class="highlight-box">
+        <p>
+          <strong>PCLS prepared with this protocol maintain viability for 48–72 hours,
+          show robust and reproducible vasoconstriction/dilation responses,
+          and preserve the cellular composition of the pulmonary vessel wall.</strong>
+        </p>
+      </div>
+
+      <ul>
+        <li>Endothelin-1 (ET-1) induces dose-dependent vasoconstriction in small pulmonary arteries (EC50 within reported range for intact vessels).</li>
+        <li>ACh-induced vasodilation is endothelium-dependent, confirming functional endothelial integrity in the PCLS preparation.</li>
+        <li>Immunofluorescent co-staining of CD31 (endothelium), αSMA (smooth muscle), and NG2 (pericytes) confirms retention of all three vascular cell layers.</li>
+        <li>Inter-preparation reproducibility (coefficient of variation for ET-1 response &lt;15%) validates the protocol for quantitative comparisons across experimental groups.</li>
+        <li>PCLS from hypoxia-exposed mice show significantly attenuated vasodilatory responses compared to normoxic controls, demonstrating disease-model utility.</li>
+      </ul>
+
+      <div class="fig-placeholder">
+        [ Figure · Representative lumen area traces during vasoconstriction / dilation assay ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Applications -->
+    <section>
+      <h2>Applications in Our Research</h2>
+      <p>
+        PCLS prepared with this protocol have been used throughout our subsequent research
+        program as a central experimental platform:
+      </p>
+      <ul>
+        <li>Characterizing vasomotor dysfunction in hypoxia-induced pulmonary hypertension models (→ pericyte HIF2α project)</li>
+        <li>Assessing ACE2 expression in intact pulmonary vessel walls following IFN stimulation (→ SARS-CoV-2 vascular infection project)</li>
+        <li>Pharmacological profiling of candidate compounds targeting vascular remodeling</li>
+        <li>Live-imaging of pericyte–endothelial dynamics under hypoxic conditions</li>
+      </ul>
+    </section>
+
+    <!-- Citation -->
+    <section>
+      <h2>Publication</h2>
+      <div class="citation-block">
+        T Klouda, H Kim, J Kim, G Visner, K Yuan.<br>
+        <strong>"Precision Cut Lung Slices as an Efficient Tool for Ex vivo Pulmonary Vessel Structure and Contractility Studies."</strong><br>
+        <em>JoVE (Journal of Visualized Experiments)</em>, e62392. 2021.
+      </div>
+    </section>
+
+  </article>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scratching & Neurogenic Immunity – Jiwon Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
+    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
+    --radius:16px; --maxw:1000px;
+  }
+  [data-theme="light"] {
+    --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
+    --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 32px 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-2); }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px;
+    color: var(--text); transition: all 0.2s;
+  }
+  .back:hover { border-color: var(--accent); color: var(--accent); transform: translateX(-4px); }
+  .btn {
+    border: 1px solid var(--border); background: transparent; color: var(--text);
+    padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    font-family: Poppins, sans-serif; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  h1 {
+    font-size: 2rem; line-height: 1.3; margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; color: var(--accent); }
+  p  { margin: 0.8rem 0; font-size: 1rem; }
+
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+  .tagrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
+  .tag {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; font-size: 0.83rem; color: var(--muted);
+    background: rgba(45,212,191,0.05);
+  }
+
+  .journal-badge {
+    display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
+  }
+  [data-theme="light"] .journal-badge { color: #fff; }
+
+  section { margin: 28px 0; }
+
+  ul, ol { padding-left: 1.3rem; margin: 0.6rem 0; }
+  li { margin: 0.4rem 0; font-size: 0.97rem; }
+  li::marker { color: var(--accent); }
+
+  .fig-placeholder {
+    background: var(--border); border-radius: 14px;
+    padding: 48px 24px; text-align: center;
+    color: var(--muted); font-size: 0.9rem; margin: 16px 0;
+    border: 2px dashed var(--border);
+  }
+
+  .grid-2 { display: grid; gap: 20px; align-items: start; }
+  @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .highlight-box {
+    background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  }
+  [data-theme="light"] .highlight-box {
+    background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2);
+  }
+  .highlight-box p { margin: 0; }
+
+  .pathway-steps {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0;
+  }
+  .step {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    background: rgba(45,212,191,0.04);
+    border-left: 3px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .step:hover { border-left-color: var(--accent); }
+  .step:first-child { border-radius: 10px 10px 0 0; }
+  .step:last-child  { border-radius: 0 0 10px 10px; }
+  .step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #000; font-weight: 700; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  [data-theme="light"] .step-num { color: #fff; }
+  .step-content strong { display: block; font-size: 0.95rem; margin-bottom: 3px; }
+  .step-content p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+
+  .citation-block {
+    background: var(--border); border-radius: 10px;
+    padding: 16px 20px; font-size: 0.88rem; color: var(--muted);
+    line-height: 1.7; margin-top: 10px;
+  }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">← Back to Home</a>
+    <button class="btn" id="themeToggle">🌓 Theme</button>
+  </div>
+
+  <article class="card">
+    <header>
+      <div class="journal-badge">Science · 2025</div>
+      <h1>Scratching Promotes Allergic Inflammation and Host Defense via Neurogenic Mast Cell Activation</h1>
+      <p class="subtitle">Mechanical itch behavior as an active driver of neuro-immune responses</p>
+      <div class="tagrow">
+        <span class="tag">Neuro-Immune Crosstalk</span>
+        <span class="tag">Mast Cells</span>
+        <span class="tag">Allergic Inflammation</span>
+        <span class="tag">Sensory Neurons</span>
+        <span class="tag">Host Defense</span>
+        <span class="tag">Skin Immunology</span>
+        <span class="tag">Itch</span>
+      </div>
+    </header>
+
+    <!-- Overview -->
+    <section>
+      <h2>Overview</h2>
+      <p>
+        Scratching in response to itch is one of the most ancient and conserved behaviors
+        in mammals, yet its immunological consequences have been largely ignored. This study
+        demonstrates that <strong>scratching is not merely a symptomatic behavior</strong>
+        — it is an active immunological effector that amplifies allergic inflammation and
+        strengthens cutaneous host defense through a defined
+        <strong>neurogenic mast cell activation cascade</strong>.
+      </p>
+      <p>
+        Published in <em>Science</em> in 2025, this work bridges sensory neurobiology,
+        mast cell immunology, and allergic disease biology to reveal a mechanosensitive
+        neuro-immune circuit that operates at the skin barrier.
+      </p>
+    </section>
+
+    <!-- Background -->
+    <section>
+      <h2>Background &amp; Motivation</h2>
+      <p>
+        Chronic itch and scratching are hallmarks of atopic dermatitis (eczema) and other
+        allergic skin diseases. The dominant clinical view treats scratching as a secondary
+        consequence that damages the skin barrier and worsens inflammation — the "itch–scratch
+        cycle." However, this framing does not account for the close anatomical and functional
+        proximity of cutaneous sensory nerves, mast cells, and immune effectors.
+      </p>
+      <p>
+        Mast cells are abundant in the skin and strategically positioned near nerve endings.
+        They are activated by a wide range of neuro-mediators including substance P, CGRP,
+        and other neuropeptides released from sensory neurons. The central question here was:
+        <em>does the act of scratching itself — independent of itch signals — activate sensory
+        neurons to release neuropeptides that, in turn, trigger mast cell degranulation and
+        downstream immune responses?</em>
+      </p>
+    </section>
+
+    <!-- The Proposed Pathway -->
+    <section>
+      <h2>The Neurogenic Activation Cascade</h2>
+      <p>The study delineates a step-by-step neuro-immune pathway triggered by mechanical scratching:</p>
+
+      <div class="pathway-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Mechanical Stimulus (Scratching)</strong>
+            <p>Physical scratch stimulus activates mechanosensitive and peptidergic sensory nerve terminals in the dermis.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Neuropeptide Release</strong>
+            <p>Activated sensory neurons release neuroactive mediators (including substance P and potentially CGRP) locally into the dermis.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Mast Cell Degranulation</strong>
+            <p>Neuropeptides bind receptors on adjacent mast cells, triggering degranulation and release of histamine, proteases, and cytokines.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Allergic Inflammation Amplification</strong>
+            <p>Mast cell products amplify Th2-skewed inflammation, recruiting eosinophils and sustaining IgE-mediated pathology.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>Host Defense Enhancement</strong>
+            <p>Simultaneously, the mast cell response enhances antimicrobial defenses at the disrupted skin barrier — a dual effector outcome.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approach -->
+    <section>
+      <h2>Experimental Approach</h2>
+
+      <div class="grid-2">
+        <div>
+          <h3>Mechanical Scratch Models</h3>
+          <p>
+            Custom mechanical scratch devices and genetic itch/scratch mouse models
+            were used to isolate the immunological effects of scratching behavior
+            from those of upstream itch signaling, allowing causal attribution.
+          </p>
+        </div>
+        <div>
+          <h3>Mast Cell Depletion and Reconstitution</h3>
+          <p>
+            Mast cell-deficient mice (Kit<sup>W-sh</sup>) and selective reconstitution
+            with wild-type or receptor-mutant mast cells were used to confirm that
+            mast cells are required mediators downstream of neurogenic scratching.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Sensory Neuron Ablation</h3>
+          <p>
+            Selective ablation of peptidergic sensory neurons (using diphtheria
+            toxin in Nav1.8-Cre; DTR mice) confirmed that scratch-driven mast
+            cell activation is neuron-dependent.
+          </p>
+        </div>
+        <div>
+          <h3>Infection and Allergy Models</h3>
+          <p>
+            Standard OVA-alum sensitization and S. aureus epicutaneous infection
+            models were combined with scratch interventions to demonstrate dual
+            pro-allergic and pro-defense outcomes.
+          </p>
+        </div>
+      </div>
+
+      <div class="fig-placeholder">
+        [ Figure · Experimental timeline and scratch-model schematic ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Findings -->
+    <section>
+      <h2>Key Findings</h2>
+
+      <div class="highlight-box">
+        <p>
+          <strong>Mechanical scratching activates a sensory neuron → neuropeptide →
+          mast cell degranulation cascade that simultaneously amplifies allergic
+          inflammation and strengthens cutaneous host defense.</strong>
+        </p>
+      </div>
+
+      <ul>
+        <li>Scratch-induced mast cell degranulation is abrogated in sensory neuron-depleted mice, establishing neurogenic dependence.</li>
+        <li>Neuropeptide receptor blockade on mast cells (e.g., NK1R antagonism) significantly attenuates scratch-driven immune amplification.</li>
+        <li>In allergic sensitization models, scratch exposure accelerates and intensifies IgE-mediated responses and skin eosinophilia.</li>
+        <li>Paradoxically, the same scratching-induced mast cell activation enhances clearance of epicutaneous S. aureus, supporting a host defense role.</li>
+        <li>The dual outcome (pro-allergic / pro-defense) is consistent with mast cells serving as sensor-integrators at the skin-barrier interface.</li>
+      </ul>
+
+      <div class="fig-placeholder">
+        [ Figure · Mast cell degranulation quantification ± sensory neuron ablation ]<br>
+        <small>Add figure when available</small>
+      </div>
+    </section>
+
+    <!-- Significance -->
+    <section>
+      <h2>Significance</h2>
+      <p>
+        This study reframes scratching from a passive symptom of itch to an
+        <strong>active immunological event</strong> with real pathological and protective
+        consequences. The findings suggest that interventions targeting the neurogenic
+        mast cell activation axis — rather than just reducing itch sensation — could
+        break the itch–scratch–inflammation cycle in atopic dermatitis at its immunological root.
+      </p>
+      <p>
+        Conversely, the host defense findings raise important caution: aggressively blocking
+        this pathway could impair skin barrier immunity. Understanding the molecular
+        specificity of pro-allergic versus pro-defense mast cell outputs is a key next
+        question opened by this work.
+      </p>
+    </section>
+
+    <!-- Citation -->
+    <section>
+      <h2>Publication</h2>
+      <div class="citation-block">
+        AW Liu, YR Zhang, CS Chen, TN Edwards, S Ozyaman, T Ramcke, …, J Kim, et al.<br>
+        <strong>"Scratching promotes allergic inflammation and host defense via neurogenic mast cell activation."</strong><br>
+        <em>Science</em>, vol. 387(6733), eadn9390. 2025.
+      </div>
+    </section>
+
+  </article>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+</body>
+</html>
