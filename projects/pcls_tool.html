@@ -9,12 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
-    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
-    --radius:16px; --maxw:1000px;
-    --canvas:#ffffff; --canvas-border:#e5e7eb;
-  }
-  [data-theme="light"] {
     --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
     --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
     --canvas:#ffffff; --canvas-border:#e5e7eb;
@@ -66,7 +60,7 @@
     display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
     background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
   }
-  [data-theme="light"] .journal-badge { color: #fff; }
+  .journal-badge { color: #fff; }
 
   section { margin: 28px 0; }
 
@@ -89,7 +83,7 @@
     background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
     border-radius: 12px; padding: 18px 22px; margin: 16px 0;
   }
-  [data-theme="light"] .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
+  .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
   .highlight-box p { margin: 0; }
 
   .advantage-card {
@@ -116,7 +110,7 @@
     color: #000; font-weight: 700; font-size: 0.78rem;
     display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
-  [data-theme="light"] .step-num { color: #fff; }
+  .step-num { color: #fff; }
   .protocol-step strong { display: block; font-size: 0.92rem; margin-bottom: 2px; }
   .protocol-step p { margin: 0; font-size: 0.85rem; color: var(--muted); }
 
@@ -133,7 +127,6 @@
 <div class="wrap">
   <div class="topbar">
     <a class="back" href="../index.html">← Back to Home</a>
-    <button class="btn" id="themeToggle">🌓 Theme</button>
   </div>
 
   <article class="card">
@@ -208,81 +201,6 @@
       </div>
     </section>
 
-    <!-- Protocol -->
-    <section>
-      <h2>Protocol Overview</h2>
-      <p>The workflow as established in this paper proceeds in five main stages:</p>
-
-      <div>
-        <div class="protocol-step">
-          <div class="step-num">1</div>
-          <div>
-            <strong>Lung Inflation & Agarose Instillation</strong>
-            <p>Low-melting-point agarose is instilled into the lungs via tracheal cannulation to provide structural support during slicing. Critical: agarose temperature and concentration must be optimized to preserve cell viability.</p>
-          </div>
-        </div>
-        <div class="protocol-step">
-          <div class="step-num">2</div>
-          <div>
-            <strong>Vibratome Slicing</strong>
-            <p>Solidified lungs are sliced at 150–200 µm thickness using a vibratome. Optimal vibration frequency and advance speed parameters are reported for consistent, damage-free slices.</p>
-          </div>
-        </div>
-        <div class="protocol-step">
-          <div class="step-num">3</div>
-          <div>
-            <strong>Agarose Removal & Recovery Incubation</strong>
-            <p>Slices are incubated at 37°C in DMEM to liquefy and wash out the agarose while cells recover functional activity. Viability is confirmed by live/dead staining.</p>
-          </div>
-        </div>
-        <div class="protocol-step">
-          <div class="step-num">4</div>
-          <div>
-            <strong>Contractility Assay Under Live Imaging</strong>
-            <p>Slices are mounted in a perfusion chamber on an inverted confocal microscope. Vasoactive agents are applied and vessel lumen area is tracked over time to quantify contractile responses.</p>
-          </div>
-        </div>
-        <div class="protocol-step">
-          <div class="step-num">5</div>
-          <div>
-            <strong>Post-Assay Fixation & Structural Analysis</strong>
-            <p>Following functional assays, slices can be fixed for immunofluorescence (αSMA, CD31, NG2) to assess vessel wall composition and structural remodeling markers.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="fig-placeholder">
-        [ Figure · Step-by-step schematic of PCLS preparation workflow ]<br>
-        <small>Add figure when available — see JoVE video protocol for reference</small>
-      </div>
-    </section>
-
-    <!-- Validation -->
-    <section>
-      <h2>Validation &amp; Key Results</h2>
-
-      <div class="highlight-box">
-        <p>
-          <strong>PCLS prepared with this protocol maintain viability for 48–72 hours,
-          show robust and reproducible vasoconstriction/dilation responses,
-          and preserve the cellular composition of the pulmonary vessel wall.</strong>
-        </p>
-      </div>
-
-      <ul>
-        <li>Endothelin-1 (ET-1) induces dose-dependent vasoconstriction in small pulmonary arteries (EC50 within reported range for intact vessels).</li>
-        <li>ACh-induced vasodilation is endothelium-dependent, confirming functional endothelial integrity in the PCLS preparation.</li>
-        <li>Immunofluorescent co-staining of CD31 (endothelium), αSMA (smooth muscle), and NG2 (pericytes) confirms retention of all three vascular cell layers.</li>
-        <li>Inter-preparation reproducibility (coefficient of variation for ET-1 response &lt;15%) validates the protocol for quantitative comparisons across experimental groups.</li>
-        <li>PCLS from hypoxia-exposed mice show significantly attenuated vasodilatory responses compared to normoxic controls, demonstrating disease-model utility.</li>
-      </ul>
-
-      <div class="fig-placeholder">
-        [ Figure · Representative lumen area traces during vasoconstriction / dilation assay ]<br>
-        <small>Add figure when available</small>
-      </div>
-    </section>
-
     <!-- Applications -->
     <section>
       <h2>Applications in Our Research</h2>
@@ -291,10 +209,16 @@
         program as a central experimental platform:
       </p>
       <ul>
-        <li>Characterizing vasomotor dysfunction in hypoxia-induced pulmonary hypertension models (→ pericyte HIF2α project)</li>
-        <li>Assessing ACE2 expression in intact pulmonary vessel walls following IFN stimulation (→ SARS-CoV-2 vascular infection project)</li>
-        <li>Pharmacological profiling of candidate compounds targeting vascular remodeling</li>
-        <li>Live-imaging of pericyte–endothelial dynamics under hypoxic conditions</li>
+        <li>
+          Characterizing pericyte-driven vascular remodeling under hypoxic conditions
+          → <a href="pericyte_hif2a.html">Pericytes Drive Pulmonary Vascular Remodeling via HIF2α</a>
+          (<em>EMBO Reports</em>, 2024)
+        </li>
+        <li>
+          Assessing ACE2 upregulation in intact pulmonary vessel walls following IFN-α/β stimulation
+          and SARS-CoV-2 vascular infection susceptibility
+          (<em>Angiogenesis</em>, 2022)
+        </li>
       </ul>
     </section>
 
@@ -311,16 +235,5 @@
   </article>
   <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
 </div>
-
-<script>
-  const root = document.documentElement;
-  const saved = localStorage.getItem('theme');
-  if (saved) root.setAttribute('data-theme', saved);
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-</script>
 </body>
 </html>

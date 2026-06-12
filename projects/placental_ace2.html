@@ -9,11 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
-    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
-    --radius:16px; --maxw:1000px;
-  }
-  [data-theme="light"] {
     --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
     --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
   }
@@ -63,7 +58,7 @@
     display: inline-flex; padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
     background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; margin-bottom: 8px;
   }
-  [data-theme="light"] .journal-badge { color: #fff; }
+  .journal-badge { color: #fff; }
 
   section { margin: 28px 0; }
   ul { padding-left: 1.3rem; margin: 0.6rem 0; }
@@ -84,14 +79,14 @@
     background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
     border-radius: 12px; padding: 18px 22px; margin: 16px 0;
   }
-  [data-theme="light"] .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
+  .highlight-box { background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2); }
   .highlight-box p { margin: 0; }
 
   .context-box {
     background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2);
     border-radius: 12px; padding: 18px 22px; margin: 16px 0;
   }
-  [data-theme="light"] .context-box { background: rgba(8,145,178,0.05); border-color: rgba(8,145,178,0.2); }
+  .context-box { background: rgba(8,145,178,0.05); border-color: rgba(8,145,178,0.2); }
   .context-box .label {
     font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;
@@ -111,7 +106,6 @@
 <div class="wrap">
   <div class="topbar">
     <a class="back" href="../index.html">← Back to Home</a>
-    <button class="btn" id="themeToggle">🌓 Theme</button>
   </div>
 
   <article class="card">
@@ -276,16 +270,5 @@
   </article>
   <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
 </div>
-
-<script>
-  const root = document.documentElement;
-  const saved = localStorage.getItem('theme');
-  if (saved) root.setAttribute('data-theme', saved);
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-</script>
 </body>
 </html>

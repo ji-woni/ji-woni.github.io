@@ -9,12 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg:#0b1414; --panel:#0f1e1e; --text:#e2f0ef; --muted:#7bb5b2;
-    --border:#1e3535; --accent:#2dd4bf; --accent-2:#38bdf8;
-    --radius:16px; --maxw:1000px;
-    --canvas:#ffffff; --canvas-border:#e5e7eb;
-  }
-  [data-theme="light"] {
     --bg:#f7fafa; --panel:#ffffff; --text:#1e2d2f; --muted:#5a7072;
     --border:#d9e8e7; --accent:#0f766e; --accent-2:#0891b2;
     --canvas:#ffffff; --canvas-border:#e5e7eb;
@@ -78,7 +72,7 @@
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: #000; margin-bottom: 8px;
   }
-  [data-theme="light"] .journal-badge { color: #fff; }
+  .journal-badge { color: #fff; }
 
   section { margin: 28px 0; }
   section p { color: var(--text); }
@@ -112,7 +106,7 @@
     background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2);
     border-radius: 12px; padding: 18px 22px; margin: 16px 0;
   }
-  [data-theme="light"] .highlight-box {
+  .highlight-box {
     background: rgba(15,118,110,0.06); border-color: rgba(15,118,110,0.2);
   }
   .highlight-box p { margin: 0; }
@@ -134,7 +128,6 @@
 <div class="wrap">
   <div class="topbar">
     <a class="back" href="../index.html">← Back to Home</a>
-    <button class="btn" id="themeToggle">🌓 Theme</button>
   </div>
 
   <article class="card">
@@ -245,43 +238,23 @@
     <section>
       <h2>Key Findings</h2>
 
-      <div class="highlight-box">
-        <p>
-          <strong>Pericyte-specific HIF2α deletion significantly attenuates hypoxia-induced
-          pulmonary vascular remodeling</strong>, reducing medial wall thickening and
-          improving right ventricular pressure — without affecting systemic hemodynamics.
-        </p>
-      </div>
-
       <ul>
-        <li>Pericytes in hypoxic lungs upregulate HIF2α and a suite of pro-remodeling target genes, including PDGF-B and angiopoietin-2.</li>
-        <li>Pericyte-specific HIF2α knockout mice show significantly reduced muscularization of small pulmonary vessels after 3 weeks of hypoxia.</li>
-        <li>PCLS from knockout animals exhibit preserved vasodilatory responses compared to remodeled vessels from wild-type hypoxic controls.</li>
-        <li>In vitro, HIF2α-activated pericytes destabilize endothelial monolayer integrity through paracrine angiopoietin-2 secretion.</li>
-        <li>These results position pericytes as an <em>upstream</em> driver of vascular instability, preceding and enabling smooth muscle cell hypertrophy.</li>
+        <li>HIF2α was a key mediator in driving pericytes to participate in distal vascular remodeling and muscularization.</li>
+        <li>Pericyte-selective HIF2α overexpression in mice exacerbates pulmonary hypertension and right ventricular hypertrophy.</li>
       </ul>
 
-      <div class="fig-placeholder">
-        [ Figure · Histology showing medial wall thickness (WT vs. KO, normoxia vs. hypoxia) ]<br>
-        <small>Add figure when available</small>
+      <figure class="canvas">
+        <img src="../assets/images/pericyte_fig7d.png" alt="Figure 7D: SMA and SMA-tdT staining of pulmonary vasculature in normoxia and hypoxia" onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='block'"/>
+        <figcaption>
+          <strong>Figure 7D.</strong> Pulmonary vasculature stained for smooth muscle actin (SMA, green)
+          and pericyte lineage reporter (SMA tdT, red) in normoxic (Norm) and hypoxic (Hx) conditions,
+          showing expanded pericyte contribution to distal vessel muscularization under hypoxia.
+        </figcaption>
+      </figure>
+      <div class="fig-placeholder" style="display:none">
+        [ Figure 7D: SMA / SMA tdT lung vasculature — Norm vs. Hx ]<br>
+        <small>Place file at assets/images/pericyte_fig7d.png</small>
       </div>
-    </section>
-
-    <!-- Significance -->
-    <section>
-      <h2>Significance</h2>
-      <p>
-        This work expands the cellular landscape of PAH pathogenesis beyond the classical
-        endothelial–smooth muscle axis. By showing that pericytes are <em>active, HIF2α-dependent
-        drivers</em> of remodeling, we open a new therapeutic angle: targeting pericyte
-        HIF2α activity could complement existing vasodilatory treatments by addressing the
-        structural remodeling component of PAH that current drugs leave unresolved.
-      </p>
-      <p>
-        More broadly, the findings highlight the importance of heterogeneous perivascular cell
-        populations in vascular biology and encourage re-examination of the pericyte
-        compartment in other vascular diseases where hypoxia plays a role.
-      </p>
     </section>
 
     <!-- Citation -->
@@ -297,17 +270,5 @@
   </article>
   <footer>© <script>document.write(new Date().getFullYear())</script> Jiwon Kim</footer>
 </div>
-
-<script>
-  const root = document.documentElement;
-  const saved = localStorage.getItem('theme');
-  if (saved) root.setAttribute('data-theme', saved);
-  const btn = document.getElementById('themeToggle');
-  btn?.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-</script>
 </body>
 </html>

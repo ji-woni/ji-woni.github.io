@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<script>
-  (function () {
-    var saved = localStorage.getItem('theme');
-    var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    var theme = saved || (prefersLight ? 'light' : 'dark');
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.style.colorScheme = theme;
-  })();
-</script>
 
 <head>
   <meta charset="UTF-8" />
@@ -30,17 +21,6 @@
       --border: #d9e8e7;
       --shadow: 0 4px 16px rgba(0,0,0,0.04);
       --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
-    }
-    [data-theme="dark"] {
-      --bg: #0c1a1a;
-      --surface: #132020;
-      --text: #e2f0ef;
-      --text-light: #7bb5b2;
-      --accent: #2dd4bf;
-      --accent-2: #38bdf8;
-      --border: #1e3535;
-      --shadow: 0 4px 16px rgba(0,0,0,0.4);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -117,15 +97,6 @@
     }
     .contact-link:hover { background: var(--bg); border-color: var(--accent); color: var(--accent); }
 
-    .theme-btn {
-      width: 100%; padding: 10px; border-radius: 9px;
-      border: 1px solid var(--border); background: var(--bg);
-      color: var(--text); cursor: pointer;
-      font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 500;
-      transition: all 0.25s;
-    }
-    .theme-btn:hover { border-color: var(--accent); }
-
     /* mobile */
     .menu-btn {
       display: none; position: fixed; top: 16px; left: 16px; z-index: 1001;
@@ -193,30 +164,54 @@
     }
     .area-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 20px 14px;
+      border-radius: 12px; padding: 11px 14px 22px;
       text-align: center; cursor: default;
       transition: all 0.25s;
+      position: relative; overflow: hidden;
     }
-    .area-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .area-emoji { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+    .area-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
     .area-name { font-size: 0.82rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+
+    /* ── Mouse mascot ── */
+    .card-mouse {
+      position: absolute; bottom: 5px; right: 7px;
+      width: 36px; height: auto;
+      opacity: 0.18; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .area-card:hover .card-mouse { opacity: 0.55; }
+    .mouse-tail {
+      transform-box: fill-box;
+      transform-origin: 0% 60%;
+      animation: tail-idle 2.4s ease-in-out infinite;
+    }
+    .area-card:hover .mouse-tail { animation: tail-wag 0.55s ease-in-out infinite; }
+    @keyframes tail-idle {
+      0%, 100% { transform: rotate(0deg);  }
+      50%       { transform: rotate(8deg);  }
+    }
+    @keyframes tail-wag {
+      0%, 100% { transform: rotate(-10deg); }
+      50%       { transform: rotate(14deg);  }
+    }
 
     .skills-divider {
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text-light);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
-    .skill-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pill {
-      padding: 5px 13px; border-radius: 20px; font-size: 0.84rem; font-weight: 500;
-      background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      transition: all 0.2s;
+    .toolkit { display: flex; flex-direction: column; gap: 10px; }
+    .toolkit-row {
+      display: grid; grid-template-columns: 120px 1fr;
+      gap: 0 12px; align-items: baseline;
+      font-size: 0.83rem; line-height: 1.5;
     }
-    .pill:hover { border-color: var(--accent); color: var(--accent); }
-    .pill.hi {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white; border-color: transparent;
+    .toolkit-cat {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--accent);
+      padding-top: 1px;
     }
+    .toolkit-items { color: var(--text-light); }
 
     /* ── Research Cards ── */
     .research-grid {
@@ -370,22 +365,19 @@
       </div>
 
       <nav class="nav">
-        <button class="nav-item active" data-section="about">       <span>👋</span> About        </button>
-        <button class="nav-item"        data-section="expertise">   <span>🧪</span> Expertise    </button>
-        <button class="nav-item"        data-section="research">    <span>🔬</span> Research     </button>
-        <button class="nav-item"        data-section="publications"><span>📄</span> Publications </button>
+        <button class="nav-item active" data-section="about">About</button>
+        <button class="nav-item"        data-section="expertise">Expertise</button>
+        <button class="nav-item"        data-section="research">Research</button>
+        <button class="nav-item"        data-section="publications">Publications</button>
       </nav>
 
       <div class="contact-links">
-        <a href="mailto:" class="contact-link"><span>📧</span> Email</a>
-        <!-- update href="mailto:..." -->
-        <a href="https://scholar.google.com/citations?user=qs57kEUAAAAJ" target="_blank" rel="noopener" class="contact-link"><span>🎓</span> Google Scholar</a>
-        <a href="#" class="contact-link"><span>🔗</span> LinkedIn</a>
-        <!-- update href -->
-        <a href="./assets/CV.pdf" download class="contact-link"><span>↓</span> CV</a>
+        <a href="mailto:jik123@pitt.edu" class="contact-link">Email</a>
+        <a href="https://scholar.google.com/citations?user=qs57kEUAAAAJ" target="_blank" rel="noopener" class="contact-link">Google Scholar</a>
+        <a href="https://www.linkedin.com/in/jiwon-kim-6149a715b/" target="_blank" rel="noopener" class="contact-link">LinkedIn</a>
+        <a href="./assets/Resume_Kim,Jiwon.pdf" download class="contact-link">Resume</a>
       </div>
 
-      <button class="theme-btn" id="themeBtn">🌙 Toggle Theme</button>
     </aside>
 
     <!-- ── Main Content ── -->
@@ -398,11 +390,15 @@
 
         <div class="about-hero">
           <p class="about-bio">
-            Researcher at the <a href="https://www.pitt.edu" target="_blank" rel="noopener"><strong>University of Pittsburgh</strong></a>
-            working at the intersection of <strong>neuroscience</strong> and <strong>vascular biology</strong>.
-            I study how neurogenic signals shape immune and vascular responses — from sensory
-            neuron–mast cell crosstalk in allergic immunity to molecular drivers of
-            <strong>pulmonary vascular remodeling</strong>.
+            Hi! I am a PhD candidate in Neuroscience at the <a href="https://www.pitt.edu" target="_blank" rel="noopener"><strong>University of Pittsburgh</strong></a>,
+            working jointly in <a href="https://www.neuroimaginglabpitt.org/" target="_blank" rel="noopener"><strong>Dr. Alberto Vazquez's</strong></a> optical imaging lab
+            and <a href="https://www.rosslab.neurobio.pitt.edu/" target="_blank" rel="noopener"><strong>Dr. Sarah Ross's</strong></a> molecular neuroscience lab
+            on an American Heart Association predoctoral fellowship. My research sits at the intersection of
+            <strong>vascular biology</strong>, <strong>in vivo imaging</strong>, and <strong>circuit neuroscience</strong>,
+            and I came to it through six years of multi-institutional work spanning pericyte biology in pulmonary disease
+            and now neurovascular function after stroke. I am most interested in research that stays close to therapeutic
+            development, and my long-term goal is to move into industry where preclinical neurovascular science can be
+            carried toward patients.
           </p>
 
           <div class="hero-graphic">
@@ -565,46 +561,57 @@
           <div>
             <div class="area-grid">
               <div class="area-card">
-                <span class="area-emoji">🧠</span>
-                <span class="area-name">Neuro-Immune Crosstalk</span>
+                <span class="area-name">Neuro-Vascular Crosstalk</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
               </div>
               <div class="area-card">
-                <span class="area-emoji">🌿</span>
-                <span class="area-name">Allergic Inflammation</span>
+                <span class="area-name">Ischemic Stroke Recovery</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
               </div>
               <div class="area-card">
-                <span class="area-emoji">🫀</span>
-                <span class="area-name">Pulmonary Vascular Biology</span>
+                <span class="area-name">Neurovascular Coupling</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
               </div>
               <div class="area-card">
-                <span class="area-emoji">⛰️</span>
-                <span class="area-name">Hypoxia &amp; Remodeling</span>
+                <span class="area-name">Angiogenesis</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
               </div>
               <div class="area-card">
-                <span class="area-emoji">🦠</span>
-                <span class="area-name">Respiratory Virology</span>
+                <span class="area-name">Glymphatic Clearance</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div class="area-card">
+                <span class="area-name">Cortical Inhibitory Neurons</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div class="area-card">
+                <span class="area-name">Netrin-1 Signaling</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+              <div class="area-card">
+                <span class="area-name">Neurodegeneration</span>
+                <svg class="card-mouse" viewBox="0 0 48 26" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="12" ry="7.5" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.2"/><circle cx="17" cy="16" r="7" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.2"/><ellipse cx="13.5" cy="8" rx="3.5" ry="4.2" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="13.5" cy="8" rx="2" ry="2.6" fill="var(--accent)" fill-opacity="0.18"/><ellipse cx="19.5" cy="7" rx="3.5" ry="4" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-width="1.1"/><ellipse cx="19.5" cy="7" rx="2" ry="2.4" fill="var(--accent)" fill-opacity="0.18"/><circle cx="14" cy="14.5" r="1.3" fill="var(--accent)" fill-opacity="0.85"/><circle cx="13.5" cy="14" r="0.45" fill="white" fill-opacity="0.7"/><ellipse cx="9.5" cy="16.5" rx="1.3" ry="1" fill="var(--accent)" fill-opacity="0.65"/><line x1="10" y1="15.2" x2="4" y2="13.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="16.5" x2="3" y2="16.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><line x1="10" y1="17.8" x2="4" y2="19.5" stroke="var(--accent)" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/><path class="mouse-tail" d="M44,14 C47,11 48,6.5 44,3" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/></svg>
               </div>
             </div>
 
             <p class="skills-divider">Technical Toolkit</p>
-            <div class="skill-cloud">
-              <span class="pill hi">Neurogenic Signaling</span>
-              <span class="pill hi">Mast Cell Biology</span>
-              <span class="pill hi">Sensory Neuron Biology</span>
-              <span class="pill hi">HIF2α / Hypoxia</span>
-              <span class="pill">Precision Cut Lung Slices</span>
-              <span class="pill">Pericyte Culture</span>
-              <span class="pill">Endothelial Cell Culture</span>
-              <span class="pill">Mouse Disease Models</span>
-              <span class="pill">Conditional Knockouts</span>
-              <span class="pill">SARS-CoV-2 Infection Assays</span>
-              <span class="pill">Confocal Microscopy</span>
-              <span class="pill">Immunofluorescence</span>
-              <span class="pill">IHC / Histology</span>
-              <span class="pill">Western Blot</span>
-              <span class="pill">qRT-PCR</span>
-              <span class="pill">Flow Cytometry</span>
-              <span class="pill">ELISA</span>
+            <div class="toolkit">
+              <div class="toolkit-row">
+                <span class="toolkit-cat">In Vivo Imaging</span>
+                <span class="toolkit-items">two-photon microscopy · LSCI · widefield imaging · cranial window prep</span>
+              </div>
+              <div class="toolkit-row">
+                <span class="toolkit-cat">Stroke Model</span>
+                <span class="toolkit-items">photothrombosis · cerebral blood flow monitoring</span>
+              </div>
+              <div class="toolkit-row">
+                <span class="toolkit-cat">Circuit Manipulation</span>
+                <span class="toolkit-items">stereotaxic injection · transgenic mouse models</span>
+              </div>
+              <div class="toolkit-row">
+                <span class="toolkit-cat">Molecular &amp; Histology</span>
+                <span class="toolkit-items">FISH · immunofluorescence · cryosectioning · tissue clearing · FACS</span>
+              </div>
             </div>
           </div>
 
@@ -824,53 +831,6 @@
             </div>
           </a>
 
-          <a href="projects/scratching_immunity.html" class="r-card">
-            <div class="r-banner rose">
-              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="170" cy="20" r="24" fill="rgba(255,255,255,0.05)"/>
-                <circle cx="20"  cy="95" r="30" fill="rgba(255,255,255,0.04)"/>
-                <!-- Sensory neuron (left) -->
-                <path d="M56,55 C44,40 32,30 22,18"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M56,55 C56,38 54,24 52,10"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M56,55 C45,60 32,63 18,62"  stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="22" cy="18" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                <circle cx="52" cy="10" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                <circle cx="18" cy="62" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                <circle cx="56" cy="55" r="12" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-                <circle cx="56" cy="55" r="5"  fill="rgba(255,255,255,0.4)"/>
-                <!-- Signal arrow -->
-                <path d="M70,55 L98,55" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M94,50 L102,55 L94,60" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <text x="77" y="48" font-size="6" fill="rgba(255,255,255,0.45)" font-family="Outfit,system-ui">NP</text>
-                <!-- Mast cell (right) -->
-                <circle cx="138" cy="55" r="18" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-                <line x1="138" y1="37" x2="138" y2="29" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="153" y1="43" x2="159" y2="37" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="153" y1="67" x2="159" y2="73" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="138" y1="73" x2="138" y2="81" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="123" y1="67" x2="117" y2="73" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="123" y1="43" x2="117" y2="37" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="132" cy="49" r="2.2" fill="rgba(255,255,255,0.35)"/>
-                <circle cx="144" cy="52" r="2.0" fill="rgba(255,255,255,0.35)"/>
-                <circle cx="136" cy="63" r="1.8" fill="rgba(255,255,255,0.35)"/>
-                <!-- Burst particles -->
-                <circle cx="163" cy="46" r="3" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
-                <circle cx="168" cy="60" r="2.5" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
-                <circle cx="160" cy="70" r="2" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-              </svg>
-            </div>
-            <div class="r-body">
-              <span class="r-badge">Science · 2025</span>
-              <h3 class="r-title">Scratching Activates Neurogenic Mast Cells, Amplifying Allergic Immunity</h3>
-              <div class="r-tags">
-                <span class="r-tag">Neuro-Immune</span>
-                <span class="r-tag">Mast Cells</span>
-                <span class="r-tag">Allergic Inflammation</span>
-              </div>
-              <span class="r-link">View project <span>→</span></span>
-            </div>
-          </a>
-
           <a href="projects/pericyte_hif2a.html" class="r-card">
             <div class="r-banner red">
               <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -905,94 +865,6 @@
                 <span class="r-tag">Pericytes</span>
                 <span class="r-tag">PCLS</span>
                 <span class="r-tag">Mouse Models</span>
-              </div>
-              <span class="r-link">View project <span>→</span></span>
-            </div>
-          </a>
-
-          <a href="projects/ifn_ace2_sars.html" class="r-card">
-            <div class="r-banner blue">
-              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="180" cy="20"  r="22" fill="rgba(255,255,255,0.04)"/>
-                <circle cx="22"  cy="100" r="28" fill="rgba(255,255,255,0.04)"/>
-                <!-- IFN signal waves (left) -->
-                <path d="M12,44 Q22,33 32,44 Q42,55 52,44 Q62,33 72,44" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M12,58 Q22,47 32,58 Q42,69 52,58 Q62,47 72,58" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-                <path d="M12,72 Q22,61 32,72 Q42,83 52,72 Q62,61 72,72" stroke="rgba(255,255,255,0.22)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-                <text x="12" y="27" font-size="8" fill="rgba(255,255,255,0.6)" font-family="Outfit,system-ui" font-weight="600">IFN-α/β</text>
-                <!-- Arrow -->
-                <path d="M76,58 L104,58" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/>
-                <path d="M100,53 L108,58 L100,63" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Cell outline -->
-                <ellipse cx="148" cy="62" rx="38" ry="40" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-                <!-- ACE2 receptor (Y-shape on cell surface, left) -->
-                <line x1="118" y1="62" x2="126" y2="62" stroke="rgba(255,255,255,0.65)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M118,62 L113,54 M118,62 L113,70" stroke="rgba(255,255,255,0.65)" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <text x="111" y="83" font-size="7" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui" font-weight="600">ACE2</text>
-                <!-- Virus particle (top right) -->
-                <circle cx="183" cy="34" r="11" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
-                <circle cx="183" cy="34" r="4"  fill="rgba(255,255,255,0.3)"/>
-                <line x1="183" y1="23" x2="183" y2="17" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="194" y1="27" x2="198" y2="23" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="194" y1="41" x2="198" y2="45" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="183" y1="45" x2="183" y2="51" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="172" y1="41" x2="168" y2="45" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="172" y1="27" x2="168" y2="23" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="r-body">
-              <span class="r-badge">Angiogenesis · 2022</span>
-              <h3 class="r-title">IFN-α/β Paradoxically Facilitates SARS-CoV-2 Vascular Infection via ACE2</h3>
-              <div class="r-tags">
-                <span class="r-tag">SARS-CoV-2</span>
-                <span class="r-tag">IFN Signaling</span>
-                <span class="r-tag">ACE2</span>
-              </div>
-              <span class="r-link">View project <span>→</span></span>
-            </div>
-          </a>
-
-          <a href="projects/placental_ace2.html" class="r-card">
-            <div class="r-banner teal">
-              <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="175" cy="15" r="20" fill="rgba(255,255,255,0.04)"/>
-                <circle cx="20"  cy="95" r="26" fill="rgba(255,255,255,0.04)"/>
-                <!-- Placenta (large scalloped circle) -->
-                <circle cx="78" cy="62" r="46" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-dasharray="5 3"/>
-                <!-- Syncytiotrophoblast bumps -->
-                <path d="M42,38 Q49,28 56,38 Q63,28 70,38 Q77,28 84,38 Q91,28 98,38 Q105,28 112,38" stroke="rgba(255,255,255,0.32)" stroke-width="1.5" fill="none"/>
-                <!-- Inner cell area -->
-                <circle cx="78" cy="64" r="28" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
-                <!-- ACE2 receptors on placenta surface -->
-                <path d="M54,46 L49,39 M54,46 L49,53 M54,46 L61,46" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M102,46 L97,39 M102,46 L97,53 M102,46 L109,46" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Shedding arrow (sACE2 released into serum) -->
-                <path d="M116,42 L135,30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
-                <circle cx="140" cy="26" r="5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" stroke-width="1.2"/>
-                <text x="148" y="22" font-size="6.5" fill="rgba(255,255,255,0.5)" font-family="Outfit,system-ui">sACE2</text>
-                <!-- Virus particle -->
-                <circle cx="162" cy="66" r="14" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
-                <circle cx="162" cy="66" r="5"  fill="rgba(255,255,255,0.28)"/>
-                <line x1="162" y1="52" x2="162" y2="46" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="174" y1="56" x2="179" y2="52" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="176" y1="66" x2="182" y2="66" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="174" y1="76" x2="179" y2="80" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="162" y1="80" x2="162" y2="86" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="150" y1="76" x2="145" y2="80" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="148" y1="66" x2="142" y2="66" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <line x1="150" y1="56" x2="145" y2="52" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" stroke-linecap="round"/>
-                <!-- Arrow virus → placenta -->
-                <path d="M147,70 L125,70" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" stroke-linecap="round"/>
-                <path d="M129,66 L124,70 L129,74" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="r-body">
-              <span class="r-badge">Am J Pathology · 2022</span>
-              <h3 class="r-title">Acute SARS-CoV-2 in Pregnancy Is Associated with Placental ACE2 Shedding</h3>
-              <div class="r-tags">
-                <span class="r-tag">SARS-CoV-2</span>
-                <span class="r-tag">Placenta</span>
-                <span class="r-tag">ACE2</span>
               </div>
               <span class="r-link">View project <span>→</span></span>
             </div>
@@ -1058,7 +930,6 @@
               <div class="pub-chips">
                 <span class="pub-journal">Science</span>
                 <span class="pub-year">2025</span>
-                <span class="pub-cite">📖 47</span>
               </div>
             </div>
           </div>
@@ -1069,7 +940,6 @@
               <div class="pub-chips">
                 <span class="pub-journal">Angiogenesis</span>
                 <span class="pub-year">2022</span>
-                <span class="pub-cite">📖 42</span>
               </div>
             </div>
           </div>
@@ -1080,7 +950,6 @@
               <div class="pub-chips">
                 <span class="pub-journal">EMBO Reports</span>
                 <span class="pub-year">2024</span>
-                <span class="pub-cite">📖 32</span>
               </div>
             </div>
           </div>
@@ -1091,7 +960,6 @@
               <div class="pub-chips">
                 <span class="pub-journal">Am J Pathology</span>
                 <span class="pub-year">2022</span>
-                <span class="pub-cite">📖 13</span>
               </div>
             </div>
           </div>
@@ -1102,7 +970,6 @@
               <div class="pub-chips">
                 <span class="pub-journal">JoVE</span>
                 <span class="pub-year">2021</span>
-                <span class="pub-cite">📖 15</span>
               </div>
             </div>
           </div>
@@ -1146,17 +1013,6 @@
       });
     });
 
-    // Theme toggle
-    const themeBtn = document.getElementById('themeBtn');
-    const root = document.documentElement;
-    function setTheme(m) {
-      root.setAttribute('data-theme', m);
-      root.style.colorScheme = m;
-      localStorage.setItem('theme', m);
-      themeBtn.textContent = m === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
-    }
-    themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
-    themeBtn.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️ Toggle Theme' : '🌙 Toggle Theme';
   </script>
 </body>
 </html>
