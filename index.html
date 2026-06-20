@@ -624,7 +624,7 @@
 
           <div class="expertise-diagram">
             <!-- Tacr1 neuron → two branches with vesicles → NO molecule / Netrin-1 → arterial dilation / angiogenesis -->
-            <svg class="neuro-cascade-svg" viewBox="0 0 260 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="neuro-cascade-svg" viewBox="0 0 260 430" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="exng" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="var(--accent)"/>
@@ -637,9 +637,9 @@
                 <path id="ax_main"    d="M130,82  C130,106 130,128 130,150"/>
                 <path id="ax_left"    d="M130,150 C112,176 90,200 72,226"/>
                 <path id="ax_right"   d="M130,150 C148,176 170,200 188,226"/>
-                <path id="ves_to_no"  d="M75,261  C74,267 73,273 72,278"/>
-                <path id="no_to_art"  d="M76,302  C64,316 54,328 50,342"/>
-                <path id="net_to_ang" d="M188,262 C190,280 192,298 188,328"/>
+                <path id="ves_to_no"  d="M72,226  C72,232 72,238 72,244"/>
+                <path id="no_to_art"  d="M72,284  C60,298 50,312 46,330"/>
+                <path id="net_to_ang" d="M188,264 C190,282 194,306 194,318"/>
               </defs>
 
               <!-- ── TACR1 NEURON ── -->
@@ -669,16 +669,16 @@
               <!-- Right branch (to Netrin-1 pathway) -->
               <path d="M130,150 C148,176 170,200 188,226" stroke="url(#exng)" stroke-width="2.4" stroke-linecap="round"/>
 
-              <!-- ── TERMINAL VESICLES – LEFT (Netrin-1) ── -->
-              <circle cx="62"  cy="236" r="9" fill="var(--accent-2)" fill-opacity="0.14" stroke="var(--accent-2)" stroke-width="2.2">
-                <animate attributeName="fill-opacity" values="0.14;0.36;0.14" dur="2.2s" repeatCount="indefinite" begin="0s"/>
+              <!-- ── NO release bubble (left) ── -->
+              <circle cx="72" cy="244" r="11" fill="none" stroke="var(--accent)" stroke-width="1.2">
+                <animate attributeName="r"       values="11;22;22" dur="2.0s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.4;0;0"   dur="2.0s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="80"  cy="230" r="9" fill="var(--accent-2)" fill-opacity="0.14" stroke="var(--accent-2)" stroke-width="2.2">
-                <animate attributeName="fill-opacity" values="0.14;0.36;0.14" dur="2.2s" repeatCount="indefinite" begin="0.4s"/>
+              <circle cx="72" cy="244" r="11" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="2.2">
+                <animate attributeName="fill-opacity" values="0.15;0.38;0.15" dur="2.2s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="72"  cy="250" r="9" fill="var(--accent-2)" fill-opacity="0.14" stroke="var(--accent-2)" stroke-width="2.2">
-                <animate attributeName="fill-opacity" values="0.14;0.36;0.14" dur="2.2s" repeatCount="indefinite" begin="0.8s"/>
-              </circle>
+              <text x="72" y="249" font-size="10" fill="var(--accent)" font-family="Outfit,system-ui,sans-serif"
+                    font-weight="700" text-anchor="middle">NO</text>
 
               <!-- ── TERMINAL VESICLES – RIGHT (Netrin-1) ── -->
               <circle cx="178" cy="236" r="9" fill="var(--accent-2)" fill-opacity="0.14" stroke="var(--accent-2)" stroke-width="2.2">
@@ -690,14 +690,6 @@
               <circle cx="188" cy="250" r="9" fill="var(--accent-2)" fill-opacity="0.14" stroke="var(--accent-2)" stroke-width="2.2">
                 <animate attributeName="fill-opacity" values="0.14;0.36;0.14" dur="2.2s" repeatCount="indefinite" begin="0.8s"/>
               </circle>
-
-              <!-- ← Netrin-1 → centered label bridging both vesicle clusters -->
-              <text x="130" y="247" font-size="12" fill="var(--accent-2)" font-family="Outfit,system-ui,sans-serif"
-                    font-weight="700" text-anchor="middle" opacity="0.9">Netrin-1</text>
-              <line x1="100" y1="242" x2="91"  y2="242" stroke="var(--accent-2)" stroke-width="1.6" opacity="0.55"/>
-              <path d="M94,239 L90,242 L94,245"  stroke="var(--accent-2)" stroke-width="1.6" fill="none" opacity="0.55"/>
-              <line x1="160" y1="242" x2="169" y2="242" stroke="var(--accent-2)" stroke-width="1.6" opacity="0.55"/>
-              <path d="M166,239 L170,242 L166,245" stroke="var(--accent-2)" stroke-width="1.6" fill="none" opacity="0.55"/>
 
               <!-- ── Signal particles ── -->
               <circle r="4.2" fill="white" filter="url(#exglow)">
@@ -713,27 +705,22 @@
                 <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" repeatCount="indefinite" begin="0.8s"/>
               </circle>
 
-              <!-- ── NO MOLECULE (left, below terminals) ── -->
-              <!-- N atom -->
-              <circle cx="52"  cy="282" r="16" fill="var(--accent)" fill-opacity="0.13" stroke="var(--accent)" stroke-width="2.2"/>
-              <text x="52" y="288" font-size="13" fill="var(--accent)" font-family="Outfit,system-ui,sans-serif"
-                    font-weight="700" text-anchor="middle">N</text>
-              <!-- Double bond -->
-              <line x1="68" y1="279" x2="82" y2="279" stroke="var(--accent)" stroke-width="2.2" opacity="0.65"/>
-              <line x1="68" y1="285" x2="82" y2="285" stroke="var(--accent)" stroke-width="2.2" opacity="0.65"/>
-              <!-- O atom -->
-              <circle cx="98"  cy="282" r="16" fill="var(--accent)" fill-opacity="0.13" stroke="var(--accent)" stroke-width="2.2"/>
-              <text x="98" y="288" font-size="13" fill="var(--accent)" font-family="Outfit,system-ui,sans-serif"
-                    font-weight="700" text-anchor="middle">O</text>
-              <!-- Nitric Oxide label -->
-              <text x="75" y="308" font-size="10" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif"
-                    text-anchor="middle" opacity="0.7">Nitric Oxide</text>
-
-              <!-- Particle: left vesicles (Netrin-1) → NO molecule -->
-              <circle r="2.8" fill="var(--accent-2)">
+              <!-- Particle: branch tip → NO bubble -->
+              <circle r="2.8" fill="var(--accent)">
                 <animateMotion dur="0.9s" repeatCount="indefinite" begin="0.3s"><mpath href="#ves_to_no"/></animateMotion>
                 <animate attributeName="opacity" values="0;1;0" dur="0.9s" repeatCount="indefinite" begin="0.3s"/>
               </circle>
+
+              <!-- ── Molecule labels — identical style, same y ── -->
+              <text x="72"  y="276" font-size="12" fill="var(--accent)"   font-family="Outfit,system-ui,sans-serif"
+                    font-weight="700" text-anchor="middle" opacity="0.9">Nitric Oxide</text>
+              <text x="188" y="276" font-size="12" fill="var(--accent-2)" font-family="Outfit,system-ui,sans-serif"
+                    font-weight="700" text-anchor="middle" opacity="0.9">Netrin-1</text>
+
+              <!-- Dashed connector: Netrin-1 → angiogenesis -->
+              <path d="M188,282 C190,296 192,310 194,318" stroke="var(--accent-2)" stroke-width="1.5"
+                    stroke-dasharray="4 4" stroke-linecap="round" opacity="0.4"/>
+
               <!-- NO particles → arterial dilation -->
               <circle r="3.2" fill="var(--accent)" filter="url(#exglow)">
                 <animateMotion dur="1.5s" repeatCount="indefinite" begin="0s"><mpath href="#no_to_art"/></animateMotion>
@@ -743,41 +730,6 @@
                 <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.75s"><mpath href="#no_to_art"/></animateMotion>
                 <animate attributeName="opacity" values="0;0.8;0" dur="1.5s" repeatCount="indefinite" begin="0.75s"/>
               </circle>
-
-              <!-- ── ARTERIAL DILATION (left bottom) ── -->
-              <text x="52" y="328" font-size="10.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif"
-                    font-weight="500" text-anchor="middle" opacity="0.75">arterial dilation</text>
-              <!-- Upper vessel wall, pulses outward -->
-              <path d="M8,342 C28,340 68,338 100,340" stroke="var(--text)" stroke-width="6" stroke-linecap="round" opacity="0.72">
-                <animate attributeName="d"
-                  values="M8,342 C28,340 68,338 100,340;M8,334 C28,332 68,330 100,332;M8,342 C28,340 68,338 100,340"
-                  dur="2.2s" repeatCount="indefinite"/>
-              </path>
-              <!-- Lower vessel wall, pulses outward -->
-              <path d="M8,360 C28,362 68,364 100,362" stroke="var(--text)" stroke-width="6" stroke-linecap="round" opacity="0.72">
-                <animate attributeName="d"
-                  values="M8,360 C28,362 68,364 100,362;M8,368 C28,370 68,372 100,370;M8,360 C28,362 68,364 100,362"
-                  dur="2.2s" repeatCount="indefinite"/>
-              </path>
-              <!-- Double-headed expanding arrow -->
-              <line x1="54" y1="344" x2="54" y2="358" stroke="var(--text-light)" stroke-width="1.6" opacity="0.4">
-                <animate attributeName="y1" values="344;336;344" dur="2.2s" repeatCount="indefinite"/>
-                <animate attributeName="y2" values="358;366;358" dur="2.2s" repeatCount="indefinite"/>
-              </line>
-              <path d="M51,346 L54,342 L57,346" stroke="var(--text-light)" stroke-width="1.4" fill="none" opacity="0.4">
-                <animate attributeName="d"
-                  values="M51,346 L54,342 L57,346;M51,338 L54,334 L57,338;M51,346 L54,342 L57,346"
-                  dur="2.2s" repeatCount="indefinite"/>
-              </path>
-              <path d="M51,356 L54,360 L57,356" stroke="var(--text-light)" stroke-width="1.4" fill="none" opacity="0.4">
-                <animate attributeName="d"
-                  values="M51,356 L54,360 L57,356;M51,364 L54,368 L57,364;M51,356 L54,360 L57,356"
-                  dur="2.2s" repeatCount="indefinite"/>
-              </path>
-
-              <!-- Dashed connector: right vesicles (Netrin-1) → angiogenesis -->
-              <path d="M188,262 C190,276 192,294 192,316" stroke="var(--accent-2)" stroke-width="1.5"
-                    stroke-dasharray="4 4" stroke-linecap="round" opacity="0.4"/>
 
               <!-- Netrin-1 particles → angiogenesis -->
               <circle r="3.2" fill="var(--accent-2)" filter="url(#exglow)">
@@ -789,17 +741,48 @@
                 <animate attributeName="opacity" values="0;0.8;0" dur="1.5s" repeatCount="indefinite" begin="0.75s"/>
               </circle>
 
+              <!-- ── ARTERIAL DILATION (left bottom) ── -->
+              <text x="52" y="310" font-size="10.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif"
+                    font-weight="500" text-anchor="middle" opacity="0.75">arterial dilation</text>
+              <!-- Upper vessel wall — resting y=334, expands to y=326 (16px clear of text baseline 310) -->
+              <path d="M8,334 C28,332 68,330 100,332" stroke="var(--text)" stroke-width="6" stroke-linecap="round" opacity="0.72">
+                <animate attributeName="d"
+                  values="M8,334 C28,332 68,330 100,332;M8,326 C28,324 68,322 100,324;M8,334 C28,332 68,330 100,332"
+                  dur="2.2s" repeatCount="indefinite"/>
+              </path>
+              <!-- Lower vessel wall -->
+              <path d="M8,352 C28,354 68,356 100,354" stroke="var(--text)" stroke-width="6" stroke-linecap="round" opacity="0.72">
+                <animate attributeName="d"
+                  values="M8,352 C28,354 68,356 100,354;M8,360 C28,362 68,364 100,362;M8,352 C28,354 68,356 100,354"
+                  dur="2.2s" repeatCount="indefinite"/>
+              </path>
+              <!-- Double-headed expanding arrow (stays inside vessel) -->
+              <line x1="54" y1="336" x2="54" y2="350" stroke="var(--text-light)" stroke-width="1.6" opacity="0.4">
+                <animate attributeName="y1" values="336;328;336" dur="2.2s" repeatCount="indefinite"/>
+                <animate attributeName="y2" values="350;358;350" dur="2.2s" repeatCount="indefinite"/>
+              </line>
+              <path d="M51,338 L54,334 L57,338" stroke="var(--text-light)" stroke-width="1.4" fill="none" opacity="0.4">
+                <animate attributeName="d"
+                  values="M51,338 L54,334 L57,338;M51,330 L54,326 L57,330;M51,338 L54,334 L57,338"
+                  dur="2.2s" repeatCount="indefinite"/>
+              </path>
+              <path d="M51,348 L54,352 L57,348" stroke="var(--text-light)" stroke-width="1.4" fill="none" opacity="0.4">
+                <animate attributeName="d"
+                  values="M51,348 L54,352 L57,348;M51,356 L54,360 L57,356;M51,348 L54,352 L57,348"
+                  dur="2.2s" repeatCount="indefinite"/>
+              </path>
+
               <!-- ── ANGIOGENESIS (right bottom) ── -->
-              <text x="194" y="318" font-size="10.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif"
+              <text x="194" y="310" font-size="10.5" fill="var(--text-light)" font-family="Outfit,system-ui,sans-serif"
                     text-anchor="middle" opacity="0.75">angiogenesis</text>
               <!-- Vessel bifurcation: trunk → Y fork → horizontal stalks -->
-              <path d="M194,324 L194,338" stroke="var(--text)" stroke-width="3.5" stroke-linecap="round" opacity="0.72"/>
-              <path d="M194,338 C186,348 176,355 164,360" stroke="var(--text)" stroke-width="3" stroke-linecap="round" opacity="0.72"/>
-              <path d="M194,338 C202,348 212,355 224,360" stroke="var(--text)" stroke-width="3" stroke-linecap="round" opacity="0.72"/>
-              <path d="M164,360 L144,360" stroke="var(--text)" stroke-width="2.8" stroke-linecap="round" opacity="0.65"/>
-              <path d="M224,360 L244,360" stroke="var(--text)" stroke-width="2.8" stroke-linecap="round" opacity="0.65"/>
+              <path d="M194,318 L194,334" stroke="var(--text)" stroke-width="3.5" stroke-linecap="round" opacity="0.72"/>
+              <path d="M194,334 C186,344 176,351 164,356" stroke="var(--text)" stroke-width="3" stroke-linecap="round" opacity="0.72"/>
+              <path d="M194,334 C202,344 212,351 224,356" stroke="var(--text)" stroke-width="3" stroke-linecap="round" opacity="0.72"/>
+              <path d="M164,356 L144,356" stroke="var(--text)" stroke-width="2.8" stroke-linecap="round" opacity="0.65"/>
+              <path d="M224,356 L244,356" stroke="var(--text)" stroke-width="2.8" stroke-linecap="round" opacity="0.65"/>
               <!-- Tip cell dot -->
-              <circle cx="194" cy="338" r="4.5" fill="var(--accent-2)" fill-opacity="0.5" stroke="var(--accent-2)" stroke-width="1.8"/>
+              <circle cx="194" cy="334" r="4.5" fill="var(--accent-2)" fill-opacity="0.5" stroke="var(--accent-2)" stroke-width="1.8"/>
             </svg>
           </div>
         </div>
