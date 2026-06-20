@@ -145,6 +145,16 @@
   }
   .fig-placeholder small { display: block; margin-top: 6px; font-size: 0.78rem; opacity: 0.6; }
 
+  .fig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+    margin: 20px 0;
+  }
+  .fig-grid .fig-wrap { margin: 0; }
+  .fig-full { grid-column: 1 / -1; }
+
   .award-box {
     border-radius: 14px; padding: 28px 32px; margin: 28px 0;
     background: linear-gradient(135deg, #1e1b4b 0%, #12012a 100%);
@@ -396,52 +406,42 @@
     <section>
       <h2>Preliminary Data</h2>
 
-      <!-- Figure 4: Ntn1 FISH -->
-      <figure class="fig-wrap">
-        <img src="../assets/images/tacr1_fig4_ntn1_fish.png" alt="Figure 4: Tacr1 neurons express high Netrin-1" onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='block'"/>
-        <figcaption class="fig-caption">
-          <strong>Figure 4. Tacr1 neurons express high Netrin-1.</strong>
-          (A) Expression heatmap showing Tacr1 neurons co-expressing <em>SST</em>, <em>nNOS</em>,
-          <em>Chodl</em> and <em>Ntn1</em>. The brighter the color (yellow), the higher the mRNA expression.
-          (B–C) FISH showing co-localization of <em>Tacr1</em> (green), <em>Ntn1</em> (red), and
-          <em>Chodl</em> (magenta) in Naïve vs. 3 dps MCAO.
-          (D) Quantification of <em>Ntn1</em> expression in Tacr1 neurons (n = 2 mice/group).
-        </figcaption>
-      </figure>
-      <div class="fig-placeholder" style="display:none">
-        [ Figure 4: Tacr1 neurons express high Netrin-1 ]<br>
-        <small>Place file at assets/images/tacr1_fig4_ntn1_fish.png</small>
-      </div>
+      <div class="fig-grid">
+        <!-- Figure 4: 600×346 — full width (complex heatmap + FISH panels) -->
+        <figure class="fig-wrap fig-full">
+          <img src="../assets/images/AHA_Figure4.png" alt="Figure 4: Tacr1 neurons express high Netrin-1"/>
+          <figcaption class="fig-caption">
+            <strong>Figure 4. Tacr1 neurons express high Netrin-1.</strong>
+            (A) Expression heatmap showing Tacr1 neurons co-expressing <em>SST</em>, <em>nNOS</em>,
+            <em>Chodl</em> and <em>Ntn1</em>. The brighter the color (yellow), the higher the mRNA expression.
+            (B–C) FISH showing co-localization of <em>Tacr1</em> (green), <em>Ntn1</em> (red), and
+            <em>Chodl</em> (magenta) in Naïve vs. 3 dps MCAO.
+            (D) Quantification of <em>Ntn1</em> expression in Tacr1 neurons (n = 2 mice/group).
+          </figcaption>
+        </figure>
 
-      <!-- Figure 7: Proof of feasibility -->
-      <figure class="fig-wrap">
-        <img src="../assets/images/tacr1_fig7_feasibility.png" alt="Figure 7: Proof of feasibility" onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='block'"/>
-        <figcaption class="fig-caption">
-          <strong>Figure 7. Proof of feasibility.</strong>
-          (A) 2P image of Cre-dependent caspase-3 combined with syn-promoter eYFP before and
-          after tamoxifen injection in Tacr1<sup>CreER</sup>-tdT mouse. White arrows indicate
-          Tacr1-tdT cells.
-          (B) 2P image of photothrombosis. Yellow indicates healthy vessel; dark red indicates
-          the occlusion. Scale bar = 50 µm.
-        </figcaption>
-      </figure>
-      <div class="fig-placeholder" style="display:none">
-        [ Figure 7: Proof of feasibility (2P imaging + photothrombosis) ]<br>
-        <small>Place file at assets/images/tacr1_fig7_feasibility.png</small>
-      </div>
+        <!-- Figure 7: 552×452 — left column -->
+        <figure class="fig-wrap">
+          <img src="../assets/images/AHA_Figure7.png" alt="Figure 7: Proof of feasibility"/>
+          <figcaption class="fig-caption">
+            <strong>Figure 7. Proof of feasibility.</strong>
+            (A) 2P image of Cre-dependent caspase-3 combined with syn-promoter eYFP before and
+            after tamoxifen injection in Tacr1<sup>CreER</sup>-tdT mouse. White arrows indicate
+            Tacr1-tdT cells.
+            (B) 2P image of photothrombosis. Yellow indicates healthy vessel; dark red indicates
+            the occlusion. Scale bar = 50 µm.
+          </figcaption>
+        </figure>
 
-      <!-- Figure 8: Vessel density -->
-      <figure class="fig-wrap">
-        <img src="../assets/images/tacr1_fig8_vessel_density.png" alt="Figure 8: Vessel density in ischemic penumbra" onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='block'"/>
-        <figcaption class="fig-caption">
-          <strong>Figure 8. Preliminary data.</strong>
-          Vessel density in ischemic penumbra: (A) representative image, (B) quantification.
-          n = 2 mice.
-        </figcaption>
-      </figure>
-      <div class="fig-placeholder" style="display:none">
-        [ Figure 8: Vessel density in ischemic penumbra ]<br>
-        <small>Place file at assets/images/tacr1_fig8_vessel_density.png</small>
+        <!-- Figure 8: 532×306 — right column -->
+        <figure class="fig-wrap">
+          <img src="../assets/images/AHA_Figure8.png" alt="Figure 8: Vessel density in ischemic penumbra"/>
+          <figcaption class="fig-caption">
+            <strong>Figure 8. Preliminary data.</strong>
+            Vessel density in ischemic penumbra: (A) representative image, (B) quantification.
+            n = 2 mice.
+          </figcaption>
+        </figure>
       </div>
     </section>
 

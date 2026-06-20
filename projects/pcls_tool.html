@@ -75,6 +75,17 @@
     border: 2px dashed var(--border);
   }
 
+  .canvas {
+    background: #fff; border: 1px solid var(--canvas-border);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1); margin: 20px auto;
+  }
+  .canvas > img { display: block; width: 100%; }
+  .canvas figcaption {
+    padding: 12px 16px; font-size: 0.86rem; color: var(--muted);
+    border-top: 1px solid var(--canvas-border); line-height: 1.6;
+  }
+
   .grid-2 { display: grid; gap: 20px; align-items: start; }
   .grid-3 { display: grid; gap: 16px; }
   @media(min-width: 800px) { .grid-2 { grid-template-columns: 1fr 1fr; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
@@ -162,6 +173,16 @@
         detailed, reproducible workflow from tissue preparation through live-imaging analysis
         that can be adopted by the vascular biology community.
       </p>
+
+      <!-- PrecisionCut_Figure.jpg — 326×427 px (portrait) -->
+      <figure class="canvas" style="max-width:420px;">
+        <img src="../assets/images/PrecisionCut_Figure.jpg" alt="Vibratome precision-cut lung slicer setup with agarose-inflated lung lobe"/>
+        <figcaption>
+          <strong>Instrument setup.</strong> Vibratome-based precision-cut lung slicer with an
+          agarose-inflated lung lobe mounted for sectioning (inset). Tissue is sliced at 150–200 µm
+          thickness, yielding viable sections suitable for live-imaging vascular studies.
+        </figcaption>
+      </figure>
     </section>
 
     <!-- The Problem PCLS Solves -->
